@@ -1,8 +1,9 @@
 """Groq LLM client with templated fallback for humanizing bot responses."""
 
 import os
+from groq import Groq
 
-_client = None
+_client: Groq | None = None
 
 
 def _get_client():
@@ -11,13 +12,13 @@ def _get_client():
         api_key = os.getenv("GROQ_API_KEY")
         if api_key:
             try:
-                from groq import Groq
                 _client = Groq(api_key=api_key)
             except Exception:
-                _client = False
+                _client = None
         else:
-            _client = False
-    return _client if _client is not False else None
+            _client = None
+
+    return _client
 
 
 async def humanize(command: str, data: dict | list) -> str:
@@ -31,7 +32,10 @@ async def humanize(command: str, data: dict | list) -> str:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
-                {"role": "system", "content": "You are a friendly office assistant bot. Reply in a casual, helpful tone. Keep responses concise (2-4 sentences max). Do not use markdown formatting."},
+                {
+                    "role": "system",
+                    "content": "You are a friendly office assistant bot. Reply in a casual, helpful tone. Keep responses concise (2-4 sentences max). Do not use markdown formatting.",
+                },
                 {"role": "user", "content": prompt},
             ],
             max_tokens=200,
@@ -67,7 +71,11 @@ def _template_fallback(command: str, data: dict | list) -> str:
                 else:
                     rooms[room]["lights_on"] += 1
 
-        room_names = {"drawing": "Drawing Room", "work1": "Work Room 1", "work2": "Work Room 2"}
+        room_names = {
+            "drawing": "Drawing Room",
+            "work1": "Work Room 1",
+            "work2": "Work Room 2",
+        }
         parts = []
         for key, info in rooms.items():
             name = room_names.get(key, key)
@@ -76,9 +84,13 @@ def _template_fallback(command: str, data: dict | list) -> str:
             else:
                 items = []
                 if info["fans_on"] > 0:
-                    items.append(f"{info['fans_on']} fan{'s' if info['fans_on'] > 1 else ''} ON")
+                    items.append(
+                        f"{info['fans_on']} fan{'s' if info['fans_on'] > 1 else ''} ON"
+                    )
                 if info["lights_on"] > 0:
-                    items.append(f"{info['lights_on']} light{'s' if info['lights_on'] > 1 else ''} ON")
+                    items.append(
+                        f"{info['lights_on']} light{'s' if info['lights_on'] > 1 else ''} ON"
+                    )
                 parts.append(f"{name}: {', '.join(items)}")
         return " | ".join(parts)
 
@@ -98,7 +110,11 @@ def _template_fallback(command: str, data: dict | list) -> str:
     elif command == "usage":
         total = data.get("total_watts_now", 0)
         per_room = data.get("per_room_watts", {})
-        room_names = {"drawing": "Drawing Room", "work1": "Work Room 1", "work2": "Work Room 2"}
+        room_names = {
+            "drawing": "Drawing Room",
+            "work1": "Work Room 1",
+            "work2": "Work Room 2",
+        }
         parts = [f"Total power right now: {total}W"]
         for room, watts in per_room.items():
             parts.append(f"{room_names.get(room, room)}: {watts}W")
