@@ -790,7 +790,7 @@ export function FloorPlan({ devices }: Props) {
             <WallLine x1={sx(35)} y1={0} x2={sx(35)} y2={sy(15)} />
             <WallLine x1={sx(66)} y1={0} x2={sx(66)} y2={sy(15)} />
 
-            <WallLine x1={0} y1={sy(15)} x2={sx(20.5)} y2={sy(15)} outer />
+            <WallLine x1={0} y1={sy(15)} x2={sx(20.5)} y2={sy(15)} />
             <WallLine x1={sx(25.5)} y1={sy(15)} x2={sx(36.5)} y2={sy(15)} />
             <WallLine x1={sx(41.5)} y1={sy(15)} x2={sx(67.5)} y2={sy(15)} />
             <WallLine x1={sx(72.5)} y1={sy(15)} x2={W} y2={sy(15)} />

@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { fetchLogs } from "../api/ws";
 import type { ChangeLog } from "../types";
 import { LogsPanel } from "./LogsPanel";
@@ -138,7 +139,13 @@ export function PowerChart({ currentWatts }: Props) {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
-                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="chartGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#34d399" stopOpacity={0.3} />
                     <stop offset="50%" stopColor="#34d399" stopOpacity={0.1} />
                     <stop offset="100%" stopColor="#34d399" stopOpacity={0} />
@@ -223,17 +230,19 @@ export function PowerChart({ currentWatts }: Props) {
       </div>
 
       {/* Logs Popup */}
-      {logsOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-999 bg-void/60 backdrop-blur-sm rounded-4xl"
-            onClick={() => setLogsOpen(false)}
-          />
-          <div className="fixed top-0 left-1/2 z-1000 w-[calc(100%-2rem)] h-[calc(100%-4rem)] max-w-2xl -translate-x-1/2">
-            <LogsPanel logs={logs} onClose={() => setLogsOpen(false)} />
-          </div>
-        </>
-      )}
+      {logsOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-999 bg-void/60 backdrop-blur-sm rounded-4xl"
+              onClick={() => setLogsOpen(false)}
+            />
+            <div className="fixed top-1/2 -translate-y-1/2 left-1/2 z-1000 w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2">
+              <LogsPanel logs={logs} onClose={() => setLogsOpen(false)} />
+            </div>
+          </>,
+          document.body,
+        )}
     </>
   );
 }
