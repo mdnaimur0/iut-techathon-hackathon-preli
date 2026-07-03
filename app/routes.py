@@ -36,3 +36,10 @@ async def api_usage():
 async def api_alerts():
     """Return active alerts."""
     return {"alerts": get_alerts()}
+
+
+@router.get("/logs")
+async def api_logs():
+    """Return the 30 most recent device state change logs."""
+    from .db import get_recent_logs
+    return {"logs": await get_recent_logs(30)}

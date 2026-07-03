@@ -25,6 +25,17 @@ export interface Usage {
   today_kwh: number;
 }
 
+export interface ChangeLog {
+  id: number;
+  device_id: string;
+  device_name: string;
+  room: string;
+  device_type: string;
+  old_status: string;
+  new_status: string;
+  timestamp: string;
+}
+
 export interface StateMessage {
   type: "state";
   devices: Device[];

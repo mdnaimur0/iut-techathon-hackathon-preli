@@ -1,4 +1,4 @@
-import type { Device, WSMessage } from "../types";
+import type { Device, ChangeLog, WSMessage } from "../types";
 
 type Listener = (devices: Device[]) => void;
 type AlertListener = (alerts: WSMessage & { type: "alerts" }) => void;
@@ -91,4 +91,14 @@ export function subscribeDisconnect(fn: ConnectListener): () => void {
 
 export function getLatestDevices(): Device[] {
   return latestDevices;
+}
+
+export async function fetchLogs(): Promise<ChangeLog[]> {
+  try {
+    const res = await fetch("/api/logs");
+    const data = await res.json();
+    return data.logs ?? [];
+  } catch {
+    return [];
+  }
 }

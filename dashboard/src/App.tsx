@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import {
   startWS,
   subscribeDevices,
@@ -275,17 +276,17 @@ function App() {
         </div>
       </nav>
 
-      {/* Alerts Popup */}
-      {alertsOpen && (
+      {alertsOpen && createPortal(
         <>
           <div
             className="fixed inset-0 z-60 bg-void/60 backdrop-blur-sm"
             onClick={() => setAlertsOpen(false)}
           />
-          <div className="fixed top-20 left-1/2 z-70 w-[calc(100%-2rem)] max-w-md -translate-x-1/2">
+          <div className="fixed top-20 inset-x-0 z-70 mx-auto w-[calc(100%-2rem)] max-w-md">
             <AlertsPanel alerts={alerts} onClose={() => setAlertsOpen(false)} />
           </div>
-        </>
+        </>,
+        document.body
       )}
 
       {/* Mobile menu overlay */}

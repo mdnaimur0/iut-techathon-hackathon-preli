@@ -19,6 +19,20 @@ def _now_local() -> datetime:
     return datetime.now(_local_tz)
 
 
+async def _record_changes(changes: list[dict]) -> None:
+    """Persist device state changes to SQLite."""
+    from .db import record_change
+    for c in changes:
+        await record_change(
+            device_id=c["device_id"],
+            device_name=c["device_name"],
+            room=c["room"],
+            device_type=c["device_type"],
+            old_status=c["old_status"],
+            new_status=c["new_status"],
+        )
+
+
 async def run() -> None:
     """Main simulator loop running as a background asyncio task."""
     while True:
@@ -28,31 +42,68 @@ async def run() -> None:
 
         devices = store.get_all_devices()
         changed = False
+        changes: list[dict] = []
 
         for device in devices:
+            old_status = device.status.value
             if is_office_hours:
                 # During office hours: mostly ON, occasional toggles
                 if device.status == store.Status.off:
                     if random.random() < 0.05:
                         store.set_device_status(device.id, store.Status.on)
                         changed = True
+                        changes.append({
+                            "device_id": device.id,
+                            "device_name": device.name,
+                            "room": device.room,
+                            "device_type": device.type.value,
+                            "old_status": old_status,
+                            "new_status": "on",
+                        })
                 else:
                     if random.random() < 0.02:
                         store.set_device_status(device.id, store.Status.off)
                         changed = True
+                        changes.append({
+                            "device_id": device.id,
+                            "device_name": device.name,
+                            "room": device.room,
+                            "device_type": device.type.value,
+                            "old_status": old_status,
+                            "new_status": "off",
+                        })
             else:
                 # After hours: mostly OFF, occasional "forgotten" devices
                 if device.status == store.Status.on:
                     if random.random() < 0.10:
                         store.set_device_status(device.id, store.Status.off)
                         changed = True
+                        changes.append({
+                            "device_id": device.id,
+                            "device_name": device.name,
+                            "room": device.room,
+                            "device_type": device.type.value,
+                            "old_status": old_status,
+                            "new_status": "off",
+                        })
                 else:
                     # Small chance a device gets left on (simulates someone forgetting)
                     if random.random() < 0.008:
                         store.set_device_status(device.id, store.Status.on)
                         changed = True
+                        changes.append({
+                            "device_id": device.id,
+                            "device_name": device.name,
+                            "room": device.room,
+                            "device_type": device.type.value,
+                            "old_status": old_status,
+                            "new_status": "on",
+                        })
 
         if changed:
+            # Persist logs to SQLite
+            await _record_changes(changes)
+
             state = [d.model_dump() for d in store.get_all_devices()]
             await manager.broadcast({"type": "state", "devices": state})
             new_alerts = check_alerts(state)
