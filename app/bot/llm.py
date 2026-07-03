@@ -48,12 +48,12 @@ async def humanize(command: str, data: dict | list) -> str:
 
 def _build_prompt(command: str, data: dict | list) -> str:
     if command == "status":
-        return f"Here's the current device status across all rooms: {data}. Summarize this in a friendly way, mentioning which rooms have devices on."
+        return f"Here's the current device status across all rooms: {data}. Summarize this in a friendly way, mentioning which rooms have devices on. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
     elif command == "room":
-        return f"Here's the detailed status for a room: {data}. Describe the room's current state in a conversational way."
+        return f"Here's the detailed status for a room: {data}. Describe the room's current state in a conversational way. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
     elif command == "usage":
-        return f"Here's the current power usage: {data}. Explain this in a friendly way, mentioning total watts and today's kWh."
-    return f"Here's the data: {data}. Summarize this briefly."
+        return f"Here's the current power usage: {data}. Explain this in a friendly way, mentioning total watts and today's kWh. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
+    return f"Here's the data: {data}. Summarize this briefly. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
 
 
 def _template_fallback(command: str, data: dict | list) -> str:
