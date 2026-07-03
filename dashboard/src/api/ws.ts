@@ -1,6 +1,6 @@
 import type { Device, ChangeLog, WSMessage } from "../types";
 
-type Listener = (devices: Device[]) => void;
+type Listener = (devices: Device[], todayKwh: number) => void;
 type AlertListener = (alerts: WSMessage & { type: "alerts" }) => void;
 type ConnectListener = () => void;
 
@@ -10,6 +10,7 @@ const alertListeners: AlertListener[] = [];
 const connectListeners: ConnectListener[] = [];
 const disconnectListeners: ConnectListener[] = [];
 let latestDevices: Device[] = [];
+let latestTodayKwh: number = 0;
 
 function getWsUrl(): string {
   const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -33,7 +34,10 @@ function connect() {
       const msg: WSMessage = JSON.parse(event.data);
       if (msg.type === "state") {
         latestDevices = msg.devices;
-        deviceListeners.forEach((fn) => fn(msg.devices));
+        if (msg.today_kwh !== undefined) {
+          latestTodayKwh = msg.today_kwh;
+        }
+        deviceListeners.forEach((fn) => fn(msg.devices, latestTodayKwh));
       } else if (msg.type === "alerts") {
         alertListeners.forEach((fn) => fn(msg));
       }

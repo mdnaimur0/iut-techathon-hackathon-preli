@@ -39,6 +39,7 @@ export interface ChangeLog {
 export interface StateMessage {
   type: "state";
   devices: Device[];
+  today_kwh?: number;
 }
 
 export interface AlertsMessage {

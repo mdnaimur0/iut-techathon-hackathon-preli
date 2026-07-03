@@ -109,7 +109,7 @@ export function DeviceCard({ device }: Props) {
               <circle cx="12" cy="12" r="10" />
               <polyline points="12,6 12,12 16,14" />
             </svg>
-            <span className="text-[9px] font-medium text-slate-mid)">
+            <span className="text-[9px] font-medium text-slate-mid">
               {new Date(device.last_changed).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",

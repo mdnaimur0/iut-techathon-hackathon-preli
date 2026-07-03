@@ -46,8 +46,10 @@ async def ws_endpoint(ws: WebSocket):
     await manager.connect(ws)
     # Send current state immediately so the client gets instant data + can
     # derive connection status from the first received message.
+    from .db import get_today_kwh
     state = services.get_state()
-    await ws.send_json({"type": "state", "devices": state})
+    today_kwh = await get_today_kwh()
+    await ws.send_json({"type": "state", "devices": state, "today_kwh": today_kwh})
     try:
         while True:
             await ws.receive_text()

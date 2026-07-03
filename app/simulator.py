@@ -33,6 +33,19 @@ async def _record_changes(changes: list[dict]) -> None:
         )
 
 
+def _get_total_watts() -> int:
+    """Sum watts across all devices that are currently ON."""
+    return sum(d.watts for d in store.get_all_devices() if d.status == store.Status.on)
+
+
+async def _build_state_payload() -> dict:
+    """Build a state broadcast payload that includes today_kwh."""
+    from .db import get_today_kwh
+    state = [d.model_dump() for d in store.get_all_devices()]
+    today_kwh = await get_today_kwh()
+    return {"type": "state", "devices": state, "today_kwh": today_kwh}
+
+
 async def run() -> None:
     """Main simulator loop running as a background asyncio task."""
     while True:
@@ -100,13 +113,21 @@ async def run() -> None:
                             "new_status": "on",
                         })
 
+        # Record cumulative watt-seconds every tick (regardless of state changes)
+        from .db import record_usage
+        total_watts = _get_total_watts()
+        await record_usage(total_watts * _tick_interval)
+
         if changed:
             # Persist logs to SQLite
             await _record_changes(changes)
 
-            state = [d.model_dump() for d in store.get_all_devices()]
-            await manager.broadcast({"type": "state", "devices": state})
-            new_alerts = check_alerts(state)
+        # Always broadcast latest state so the dashboard stays in sync
+        payload = await _build_state_payload()
+        await manager.broadcast(payload)
+
+        if changed:
+            new_alerts = check_alerts(payload["devices"])
             if new_alerts:
                 alert_dicts = [a.model_dump() for a in new_alerts]
                 await manager.broadcast({"type": "alerts", "alerts": alert_dicts})

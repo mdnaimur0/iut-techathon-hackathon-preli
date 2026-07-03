@@ -67,6 +67,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [bellPulse, setBellPulse] = useState(false);
+  const [todayKwh, setTodayKwh] = useState(0);
   const prevAlertCount = useRef(0);
 
   const heroRef = useInView(0.1);
@@ -110,8 +111,9 @@ function App() {
   useEffect(() => {
     startWS();
 
-    const unsubDevices = subscribeDevices((devs) => {
+    const unsubDevices = subscribeDevices((devs, kwh) => {
       setDevices(devs);
+      setTodayKwh(kwh);
     });
 
     const unsubAlerts = subscribeAlerts((msg) => {
@@ -176,7 +178,7 @@ function App() {
   const usage: Usage = {
     total_watts_now: totalWatts,
     per_room_watts: perRoomWatts,
-    today_kwh: 0,
+    today_kwh: todayKwh,
   };
 
   const onCount = devices.filter((d) => d.status === "on").length;
