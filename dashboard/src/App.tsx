@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { startWS, subscribeDevices, subscribeAlerts } from "./api/ws";
+import { startWS, subscribeDevices, subscribeAlerts, subscribeConnect, subscribeDisconnect } from "./api/ws";
 import type { Device, Alert, Usage } from "./types";
 import { DeviceGrid } from "./components/DeviceGrid";
 import { PowerMeter } from "./components/PowerMeter";
@@ -50,7 +50,6 @@ function App() {
 
     const unsubDevices = subscribeDevices((devs) => {
       setDevices(devs);
-      setConnected(true);
     });
 
     const unsubAlerts = subscribeAlerts((msg) => {
@@ -60,9 +59,19 @@ function App() {
       });
     });
 
+    const unsubConnect = subscribeConnect(() => {
+      setConnected(true);
+    });
+
+    const unsubDisconnect = subscribeDisconnect(() => {
+      setConnected(false);
+    });
+
     return () => {
       unsubDevices();
       unsubAlerts();
+      unsubConnect();
+      unsubDisconnect();
     };
   }, []);
 

@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
-from . import routes, simulator
+from . import routes, services, simulator
 from .ws import manager
 
 load_dotenv()
@@ -44,6 +44,10 @@ app.include_router(routes.router, prefix="/api")
 async def ws_endpoint(ws: WebSocket):
     """WebSocket endpoint for real-time state push."""
     await manager.connect(ws)
+    # Send current state immediately so the client gets instant data + can
+    # derive connection status from the first received message.
+    state = services.get_state()
+    await ws.send_json({"type": "state", "devices": state})
     try:
         while True:
             await ws.receive_text()
