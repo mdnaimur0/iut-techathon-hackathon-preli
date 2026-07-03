@@ -1,7 +1,8 @@
-"""SQLite persistence — cumulative kWh tracking + device change logs."""
+"""SQLite persistence — cumulative kWh tracking + device change logs + bot config."""
 
 import aiosqlite
 import asyncio
+import hashlib
 from datetime import datetime, timezone, date
 from zoneinfo import ZoneInfo
 
@@ -34,6 +35,12 @@ async def _ensure_db() -> None:
                 old_status TEXT NOT NULL,
                 new_status TEXT NOT NULL,
                 timestamp TEXT NOT NULL
+            )
+        """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS bot_config (
+                token_hash TEXT PRIMARY KEY,
+                alert_channel_id TEXT
             )
         """)
         await db.commit()
@@ -101,3 +108,33 @@ async def get_recent_logs(limit: int = 30) -> list[dict]:
             )
             rows = await cursor.fetchall()
             return [dict(row) for row in rows]
+
+
+def hash_token(token: str) -> str:
+    """Return a SHA-256 hex digest of the bot token for use as a DB key."""
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+async def save_alert_channel(token_hash: str, channel_id: str) -> None:
+    """Save (or overwrite) the alert channel ID for a given bot token."""
+    await _ensure_db()
+    async with _db_lock:
+        async with aiosqlite.connect(_db_path) as db:
+            await db.execute(
+                "INSERT OR REPLACE INTO bot_config (token_hash, alert_channel_id) VALUES (?, ?)",
+                (token_hash, channel_id),
+            )
+            await db.commit()
+
+
+async def get_alert_channel(token_hash: str) -> str | None:
+    """Look up the stored alert channel ID for a given bot token. Returns None if not set."""
+    await _ensure_db()
+    async with _db_lock:
+        async with aiosqlite.connect(_db_path) as db:
+            cursor = await db.execute(
+                "SELECT alert_channel_id FROM bot_config WHERE token_hash = ?",
+                (token_hash,),
+            )
+            row = await cursor.fetchone()
+            return row[0] if row else None
