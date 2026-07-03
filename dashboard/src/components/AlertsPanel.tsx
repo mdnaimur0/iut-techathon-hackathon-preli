@@ -9,7 +9,7 @@ interface Props {
 export function AlertsPanel({ alerts, onClose, onClearAll }: Props) {
   return (
     <div className="overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
-      <div className="relative flex flex-col rounded-[1.625rem] bg-onyx shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+      <div className="card-surface relative flex flex-col rounded-[1.625rem] bg-onyx">
         {alerts.length > 0 && (
           <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-accent-red-dim blur-3xl" />
         )}

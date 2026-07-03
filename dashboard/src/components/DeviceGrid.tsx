@@ -36,7 +36,7 @@ export function DeviceGrid({ devices }: Props) {
             key={room.key}
             className="group/room h-full rounded-3xl bg-glass-bg p-1.5 ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:ring-accent-emerald/20"
           >
-            <div className="relative overflow-hidden rounded-[1.125rem] bg-onyx p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+            <div className="card-surface relative overflow-hidden rounded-[1.125rem] bg-onyx p-4">
               <div
                 className={`absolute -top-10 -right-10 h-24 w-24 rounded-full blur-3xl transition-opacity duration-700 ${
                   ROOM_GLOWS[room.key] ?? ROOM_GLOWS.drawing

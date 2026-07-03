@@ -24,6 +24,51 @@
   --color-accent-red-dim: var(--color-accent-red-dim);
   --color-glass-border: var(--color-glass-border);
   --color-glass-bg: var(--color-glass-bg);
+  --fp-wall-outer: var(--fp-wall-outer);
+  --fp-wall-inner: var(--fp-wall-inner);
+  --fp-grid: var(--fp-grid);
+  --fp-floor-drawing: var(--fp-floor-drawing);
+  --fp-floor-drawing-line: var(--fp-floor-drawing-line);
+  --fp-floor-work1: var(--fp-floor-work1);
+  --fp-floor-work1-line: var(--fp-floor-work1-line);
+  --fp-floor-work2: var(--fp-floor-work2);
+  --fp-floor-work2-line: var(--fp-floor-work2-line);
+  --fp-floor-hallway: var(--fp-floor-hallway);
+  --fp-room-border: var(--fp-room-border);
+  --fp-wall-line: var(--fp-wall-line);
+  --fp-door-stroke: var(--fp-door-stroke);
+  --fp-furniture-stroke: var(--fp-furniture-stroke);
+  --fp-desk-top: var(--fp-desk-top);
+  --fp-desk-detail: var(--fp-desk-detail);
+  --fp-desk-paper: var(--fp-desk-paper);
+  --fp-desk-screen-off: var(--fp-desk-screen-off);
+  --fp-desk-body: var(--fp-desk-body);
+  --fp-desk-body-light: var(--fp-desk-body-light);
+  --fp-desk-surface: var(--fp-desk-surface);
+  --fp-desk-surface-inner: var(--fp-desk-surface-inner);
+  --fp-chair-body: var(--fp-chair-body);
+  --fp-chair-body-stroke: var(--fp-chair-body-stroke);
+  --fp-chair-seat: var(--fp-chair-seat);
+  --fp-chair-seat-stroke: var(--fp-chair-seat-stroke);
+  --fp-chair-arm: var(--fp-chair-arm);
+  --fp-chair-cushion: var(--fp-chair-cushion);
+  --fp-fan-blade-on: var(--fp-fan-blade-on);
+  --fp-fan-blade-off: var(--fp-fan-blade-off);
+  --fp-fan-center-on: var(--fp-fan-center-on);
+  --fp-fan-center-off: var(--fp-fan-center-off);
+  --fp-light-off: var(--fp-light-off);
+  --fp-door-fill: var(--fp-door-fill);
+  --fp-rug-fill: var(--fp-rug-fill);
+  --fp-rug-stroke: var(--fp-rug-stroke);
+  --fp-water-body: var(--fp-water-body);
+  --fp-water-base: var(--fp-water-base);
+  --fp-plant-pot: var(--fp-plant-pot);
+  --fp-plant-pot-light: var(--fp-plant-pot-light);
+  --fp-plant-dark: var(--fp-plant-dark);
+  --fp-plant-mid: var(--fp-plant-mid);
+  --fp-plant-center: var(--fp-plant-center);
+  --fp-plant-light: var(--fp-plant-light);
+  --fp-door-swing: var(--fp-door-swing);
 }
 
 :root,
@@ -52,33 +97,125 @@
   --mesh-1: rgba(52, 211, 153, 0.06);
   --mesh-2: rgba(167, 139, 250, 0.05);
   --mesh-3: rgba(52, 211, 153, 0.02);
+  /* SVG floor plan tokens */
+  --fp-wall-outer: rgba(255, 255, 255, 0.15);
+  --fp-wall-inner: rgba(255, 255, 255, 0.10);
+  --fp-grid: rgba(255, 255, 255, 0.012);
+  --fp-floor-drawing: rgba(200, 180, 150, 0.10);
+  --fp-floor-drawing-line: rgba(200, 180, 150, 0.04);
+  --fp-floor-work1: rgba(200, 200, 210, 0.08);
+  --fp-floor-work1-line: rgba(200, 200, 210, 0.04);
+  --fp-floor-work2: rgba(180, 160, 130, 0.08);
+  --fp-floor-work2-line: rgba(180, 160, 130, 0.05);
+  --fp-floor-hallway: rgba(255, 255, 255, 0.03);
+  --fp-room-border: rgba(200, 180, 150, 0.08);
+  --fp-wall-line: rgba(255, 255, 255, 0.10);
+  --fp-door-stroke: rgba(255, 255, 255, 0.08);
+  --fp-furniture-stroke: rgba(255, 255, 255, 0.05);
+  --fp-desk-top: #1a1a2e;
+  --fp-desk-detail: #2a2a4e;
+  --fp-desk-paper: #2a2a2a;
+  --fp-desk-screen-off: #1a1a2e;
+  --fp-desk-body: #6b4226;
+  --fp-desk-body-light: #8a5a38;
+  --fp-desk-surface: #5c3a1e;
+  --fp-desk-surface-inner: #6b4a2a;
+  --fp-chair-body: #c4b599;
+  --fp-chair-body-stroke: rgba(255, 255, 255, 0.04);
+  --fp-chair-seat: #d4c5a9;
+  --fp-chair-seat-stroke: rgba(255, 255, 255, 0.03);
+  --fp-chair-arm: #b8a88c;
+  --fp-chair-cushion: #e0d0b8;
+  --fp-fan-blade-on: #c8953a;
+  --fp-fan-blade-off: #4a3f30;
+  --fp-fan-center-on: #d4a84a;
+  --fp-fan-center-off: #4a3f30;
+  --fp-light-off: #2a2a33;
+  --fp-door-fill: #1c1c22;
+  --fp-rug-fill: rgba(160, 160, 160, 0.08);
+  --fp-rug-stroke: rgba(255, 255, 255, 0.03);
+  --fp-water-body: #3b82f6;
+  --fp-water-base: #1c1c22;
+  --fp-plant-pot: #6b4226;
+  --fp-plant-pot-light: #7a5230;
+  --fp-plant-dark: #22804a;
+  --fp-plant-mid: #2da858;
+  --fp-plant-center: #1a6a38;
+  --fp-plant-light: #34b86a;
+  --fp-door-swing: grey;
 }
 
 [data-theme="light"] {
-  --color-void: #f4f2ee;
-  --color-obsidian: #faf9f7;
+  --color-void: #f6f4f0;
+  --color-obsidian: #fdfcfa;
   --color-onyx: #ffffff;
-  --color-carbon: #eae7e2;
-  --color-graphite: #d5d2cd;
-  --color-slate-dim: #b0adab;
-  --color-slate-mid: #8f8c8a;
-  --color-slate-bright: #656260;
-  --color-text-primary: #1a1817;
-  --color-text-secondary: #6b6967;
-  --color-text-tertiary: #837f7c;
-  --color-accent-emerald: #059669;
-  --color-accent-emerald-dim: rgba(5, 150, 105, 0.12);
-  --color-accent-purple: #7c3aed;
-  --color-accent-purple-dim: rgba(124, 58, 237, 0.12);
-  --color-accent-amber: #d97706;
-  --color-accent-amber-dim: rgba(217, 119, 6, 0.12);
-  --color-accent-red: #dc2626;
-  --color-accent-red-dim: rgba(220, 38, 38, 0.12);
-  --color-glass-border: rgba(0, 0, 0, 0.06);
-  --color-glass-bg: rgba(0, 0, 0, 0.04);
-  --mesh-1: rgba(5, 150, 105, 0.08);
-  --mesh-2: rgba(124, 58, 237, 0.06);
-  --mesh-3: rgba(249, 115, 22, 0.04);
+  --color-carbon: #f0eee9;
+  --color-graphite: #e2dfd8;
+  --color-slate-dim: #c4c0b8;
+  --color-slate-mid: #9a968e;
+  --color-slate-bright: #6e6a62;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-text-tertiary: #a8a29e;
+  --color-accent-emerald: #047857;
+  --color-accent-emerald-dim: rgba(4, 120, 87, 0.08);
+  --color-accent-purple: #6d28d9;
+  --color-accent-purple-dim: rgba(109, 40, 217, 0.07);
+  --color-accent-amber: #b45309;
+  --color-accent-amber-dim: rgba(180, 83, 9, 0.07);
+  --color-accent-red: #b91c1c;
+  --color-accent-red-dim: rgba(185, 28, 28, 0.07);
+  --color-glass-border: rgba(0, 0, 0, 0.08);
+  --color-glass-bg: rgba(0, 0, 0, 0.025);
+  --mesh-1: rgba(4, 120, 87, 0.05);
+  --mesh-2: rgba(109, 40, 217, 0.04);
+  --mesh-3: rgba(180, 83, 9, 0.03);
+  /* SVG floor plan tokens — light */
+  --fp-wall-outer: rgba(0, 0, 0, 0.14);
+  --fp-wall-inner: rgba(0, 0, 0, 0.09);
+  --fp-grid: rgba(0, 0, 0, 0.02);
+  --fp-floor-drawing: rgba(180, 160, 130, 0.10);
+  --fp-floor-drawing-line: rgba(180, 160, 130, 0.06);
+  --fp-floor-work1: rgba(160, 160, 180, 0.08);
+  --fp-floor-work1-line: rgba(160, 160, 180, 0.05);
+  --fp-floor-work2: rgba(160, 140, 110, 0.08);
+  --fp-floor-work2-line: rgba(160, 140, 110, 0.06);
+  --fp-floor-hallway: rgba(0, 0, 0, 0.02);
+  --fp-room-border: rgba(160, 140, 110, 0.12);
+  --fp-wall-line: rgba(0, 0, 0, 0.10);
+  --fp-door-stroke: rgba(0, 0, 0, 0.10);
+  --fp-furniture-stroke: rgba(0, 0, 0, 0.06);
+  --fp-desk-top: #3a3a5e;
+  --fp-desk-detail: #5a5a7e;
+  --fp-desk-paper: #4a4a4a;
+  --fp-desk-screen-off: #3a3a5e;
+  --fp-desk-body: #8a6240;
+  --fp-desk-body-light: #a07050;
+  --fp-desk-surface: #7a5230;
+  --fp-desk-surface-inner: #8a6a4a;
+  --fp-chair-body: #d8cab0;
+  --fp-chair-body-stroke: rgba(0, 0, 0, 0.05);
+  --fp-chair-seat: #e8d8c0;
+  --fp-chair-seat-stroke: rgba(0, 0, 0, 0.04);
+  --fp-chair-arm: #c8b898;
+  --fp-chair-cushion: #f0e0c8;
+  --fp-fan-blade-on: #b08530;
+  --fp-fan-blade-off: #8a7a60;
+  --fp-fan-center-on: #c89a40;
+  --fp-fan-center-off: #8a7a60;
+  --fp-light-off: #c4c0b8;
+  --fp-door-fill: #e2dfd8;
+  --fp-rug-fill: rgba(120, 120, 120, 0.06);
+  --fp-rug-stroke: rgba(0, 0, 0, 0.04);
+  --fp-water-body: #60a5fa;
+  --fp-water-base: #e2dfd8;
+  --fp-plant-pot: #8a6240;
+  --fp-plant-pot-light: #9a7250;
+  --fp-plant-dark: #2a9050;
+  --fp-plant-mid: #38b860;
+  --fp-plant-center: #208040;
+  --fp-plant-light: #40c870;
+  --fp-door-swing: #9a968e;
 }
 
 html {
@@ -237,4 +374,52 @@ body {
 }
 [data-theme="light"] .reveal.visible {
   filter: blur(0);
+}
+
+/* ── Light-mode premium card system ── */
+[data-theme="light"] .card-inner-shadow {
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .card-surface {
+  background: var(--color-onyx);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.03),
+    inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .card-surface-elevated {
+  background: var(--color-onyx);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    0 12px 40px rgba(0, 0, 0, 0.03),
+    inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .nav-glass {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 20px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .badge-glass {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .mesh-bg {
+  opacity: 1;
+}
+
+[data-theme="light"] .grain-overlay {
+  opacity: 0.018;
+  mix-blend-mode: multiply;
 }

@@ -21,7 +21,7 @@ export function PowerMeter({ usage }: Props) {
 
   return (
     <div className="h-full rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
-      <div className="relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+      <div className="card-surface relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5">
         <div className="absolute -top-16 -left-16 h-40 w-40 rounded-full bg-accent-emerald-dim blur-3xl" />
 
         {/* Header */}
@@ -113,7 +113,7 @@ export function PowerMeter({ usage }: Props) {
 
         {/* Stats row */}
         <div className="relative mb-6 grid grid-cols-2 gap-3">
-          <div className="rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border">
+          <div className="rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border card-inner-shadow">
             <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
               Capacity
             </p>
@@ -122,7 +122,7 @@ export function PowerMeter({ usage }: Props) {
               <span className="text-xs font-medium text-text-tertiary">%</span>
             </p>
           </div>
-          <div className="rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border">
+          <div className="rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border card-inner-shadow">
             <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
               Today
             </p>

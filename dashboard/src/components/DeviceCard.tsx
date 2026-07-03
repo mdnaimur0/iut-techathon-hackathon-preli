@@ -20,8 +20,8 @@ export function DeviceCard({ device }: Props) {
         <div
           className={`relative overflow-hidden rounded-[calc(0.75rem-1px)] px-3 py-2.5 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
             isOn
-              ? "bg-onyx/90 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]"
-              : "bg-onyx/70"
+              ? "bg-onyx/95 card-inner-shadow"
+              : "bg-onyx/80"
           }`}
         >
           {isOn && (

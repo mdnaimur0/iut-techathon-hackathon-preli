@@ -38,7 +38,7 @@ function LightIcon({ x, y, on }: { x: number; y: number; on: boolean }) {
         cx={x}
         cy={y}
         r={10}
-        fill={on ? "#facc15" : "#2a2a33"}
+        fill={on ? "#facc15" : "var(--fp-light-off)"}
         opacity={on ? 1 : 0.5}
       />
       {on && (
@@ -60,7 +60,7 @@ function FanIcon({ x, y, on }: { x: number; y: number; on: boolean }) {
   return (
     <g>
       {on && (
-        <circle cx={x} cy={y} r={24} fill="#c8953a" opacity={0.06}>
+        <circle cx={x} cy={y} r={24} fill="var(--fp-fan-blade-on)" opacity={0.06}>
           <animate
             attributeName="r"
             from="18"
@@ -77,7 +77,7 @@ function FanIcon({ x, y, on }: { x: number; y: number; on: boolean }) {
           />
         </circle>
       )}
-      <circle cx={x} cy={y} r={4} fill={on ? "#c8953a" : "#4a3f30"} />
+      <circle cx={x} cy={y} r={4} fill={on ? "var(--fp-fan-center-on)" : "var(--fp-fan-center-off)"} />
       <g transform={`translate(${x}, ${y})`}>
         <g>
           {on && (
@@ -97,13 +97,13 @@ function FanIcon({ x, y, on }: { x: number; y: number; on: boolean }) {
               cy={-11}
               rx={3.5}
               ry={11}
-              fill={on ? "#c8953a" : "#4a3f30"}
+              fill={on ? "var(--fp-fan-blade-on)" : "var(--fp-fan-blade-off)"}
               opacity={on ? 0.9 : 0.5}
               transform={`rotate(${angle})`}
             />
           ))}
         </g>
-        <circle cx={0} cy={0} r={3} fill={on ? "#d4a84a" : "#4a3f30"} />
+        <circle cx={0} cy={0} r={3} fill={on ? "var(--fp-fan-center-on)" : "var(--fp-fan-center-off)"} />
       </g>
     </g>
   );
@@ -112,14 +112,14 @@ function FanIcon({ x, y, on }: { x: number; y: number; on: boolean }) {
 function PlantIcon({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x}, ${y})`}>
-      <path d="M-5,3 L-4,10 L4,10 L5,3 Z" fill="#6b4226" />
-      <rect x={-6} y={0} width={12} height={3} rx={1} fill="#7a5230" />
+      <path d="M-5,3 L-4,10 L4,10 L5,3 Z" fill="var(--fp-plant-pot)" />
+      <rect x={-6} y={0} width={12} height={3} rx={1} fill="var(--fp-plant-pot-light)" />
       <ellipse
         cx={-5}
         cy={-4}
         rx={4}
         ry={8}
-        fill="#22804a"
+        fill="var(--fp-plant-dark)"
         opacity={0.8}
         transform="rotate(-20)"
       />
@@ -128,17 +128,17 @@ function PlantIcon({ x, y }: { x: number; y: number }) {
         cy={-4}
         rx={4}
         ry={8}
-        fill="#2da858"
+        fill="var(--fp-plant-mid)"
         opacity={0.8}
         transform="rotate(20)"
       />
-      <ellipse cx={0} cy={-7} rx={3} ry={9} fill="#1a6a38" opacity={0.9} />
+      <ellipse cx={0} cy={-7} rx={3} ry={9} fill="var(--fp-plant-center)" opacity={0.9} />
       <ellipse
         cx={-3}
         cy={-1}
         rx={3}
         ry={6}
-        fill="#34b86a"
+        fill="var(--fp-plant-light)"
         opacity={0.7}
         transform="rotate(-10)"
       />
@@ -147,7 +147,7 @@ function PlantIcon({ x, y }: { x: number; y: number }) {
         cy={-1}
         rx={3}
         ry={6}
-        fill="#34b86a"
+        fill="var(--fp-plant-light)"
         opacity={0.7}
         transform="rotate(10)"
       />
@@ -176,8 +176,8 @@ function DeskIcon({
         width={32}
         height={24}
         rx={2}
-        fill="#6b4226"
-        stroke="rgba(255,255,255,0.05)"
+        fill="var(--fp-desk-body)"
+        stroke="var(--fp-furniture-stroke)"
         strokeWidth={0.5}
       />
       <rect
@@ -186,23 +186,23 @@ function DeskIcon({
         width={32}
         height={2}
         rx={1}
-        fill="#8a5a38"
+        fill="var(--fp-desk-body-light)"
         opacity={0.5}
       />
-      <rect x={-7} y={-10} width={14} height={10} rx={1} fill="#1a1a2e" />
+      <rect x={-7} y={-10} width={14} height={10} rx={1} fill="var(--fp-desk-top)" />
       <rect
         x={-3}
         y={-6}
         width={6}
         height={4}
         rx={0.5}
-        fill="#2a2a4e"
+        fill="var(--fp-desk-detail)"
         opacity={0.5}
       />
-      <rect x={-6} y={0} width={12} height={3} rx={0.8} fill="#2a2a2a" />
-      <ellipse cx={8} cy={1} rx={2} ry={1.5} fill="#2a2a2a" />
-      <ellipse cx={0} cy={16} rx={7} ry={5} fill="#1a1a1a" />
-      <rect x={-5} y={14} width={10} height={5} rx={2} fill="#1a1a1a" />
+      <rect x={-6} y={0} width={12} height={3} rx={0.8} fill="var(--fp-desk-paper)" />
+      <ellipse cx={8} cy={1} rx={2} ry={1.5} fill="var(--fp-desk-paper)" />
+      <ellipse cx={0} cy={16} rx={7} ry={5} fill="var(--fp-desk-screen-off)" />
+      <rect x={-5} y={14} width={10} height={5} rx={2} fill="var(--fp-desk-screen-off)" />
       {hasPaper && (
         <rect
           x={-14}
@@ -216,14 +216,14 @@ function DeskIcon({
       )}
       {hasPlant && (
         <g transform={`translate(${plantLeft ? -13 : 13}, ${7})`}>
-          <rect x={-2} y={-1} width={4} height={4} rx={1} fill="#6b4226" />
-          <ellipse cx={0} cy={-3} rx={2} ry={4} fill="#22804a" opacity={0.9} />
+          <rect x={-2} y={-1} width={4} height={4} rx={1} fill="var(--fp-plant-pot)" />
+          <ellipse cx={0} cy={-3} rx={2} ry={4} fill="var(--fp-plant-dark)" opacity={0.9} />
           <ellipse
             cx={-1}
             cy={-4}
             rx={1.5}
             ry={3}
-            fill="#2da858"
+            fill="var(--fp-plant-mid)"
             opacity={0.8}
           />
         </g>
@@ -246,8 +246,8 @@ function SofaIcon({ x, y }: { x: number; y: number }) {
         width={seatW + 8}
         height={totalH}
         rx={4}
-        fill="#c4b599"
-        stroke="rgba(255,255,255,0.04)"
+        fill="var(--fp-chair-body)"
+        stroke="var(--fp-chair-body-stroke)"
         strokeWidth={0.5}
       />
       {[0, 1, 2, 3].map((i) => (
@@ -258,19 +258,19 @@ function SofaIcon({ x, y }: { x: number; y: number }) {
           width={seatW}
           height={seatH}
           rx={3}
-          fill="#d4c5a9"
-          stroke="rgba(255,255,255,0.03)"
+          fill="var(--fp-chair-seat)"
+          stroke="var(--fp-chair-seat-stroke)"
           strokeWidth={0.3}
         />
       ))}
-      <rect x={-2} y={0} width={seatW + 8} height={arm} rx={2} fill="#b8a88c" />
+      <rect x={-2} y={0} width={seatW + 8} height={arm} rx={2} fill="var(--fp-chair-arm)" />
       <rect
         x={-2}
         y={totalH - arm}
         width={seatW + 8}
         height={arm}
         rx={2}
-        fill="#b8a88c"
+        fill="var(--fp-chair-arm)"
       />
       {[0, 1, 2, 3].map((i) => (
         <rect
@@ -280,7 +280,7 @@ function SofaIcon({ x, y }: { x: number; y: number }) {
           width={seatW - 4}
           height={5}
           rx={2}
-          fill="#e0d0b8"
+          fill="var(--fp-chair-cushion)"
           opacity={0.5}
         />
       ))}
@@ -297,8 +297,8 @@ function CoffeeTableIcon({ x, y }: { x: number; y: number }) {
         width={36}
         height={32}
         rx={3}
-        fill="#5c3a1e"
-        stroke="rgba(255,255,255,0.04)"
+        fill="var(--fp-desk-surface)"
+        stroke="var(--fp-furniture-stroke)"
         strokeWidth={0.5}
       />
       <rect
@@ -307,7 +307,7 @@ function CoffeeTableIcon({ x, y }: { x: number; y: number }) {
         width={32}
         height={28}
         rx={2}
-        fill="#6b4a2a"
+        fill="var(--fp-desk-surface-inner)"
         opacity={0.4}
       />
     </g>
@@ -322,8 +322,8 @@ function RugIcon({ x, y }: { x: number; y: number }) {
       width={100}
       height={90}
       rx={6}
-      fill="rgba(160,160,160,0.08)"
-      stroke="rgba(255,255,255,0.03)"
+      fill="var(--fp-rug-fill)"
+      stroke="var(--fp-rug-stroke)"
       strokeWidth={0.5}
     />
   );
@@ -338,11 +338,11 @@ function WaterDispenserIcon({ x, y }: { x: number; y: number }) {
         width={12}
         height={20}
         rx={4}
-        fill="#3b82f6"
+        fill="var(--fp-water-body)"
         opacity={0.4}
       />
-      <circle cx={0} cy={-14} r={4} fill="#3b82f6" opacity={0.3} />
-      <rect x={-8} y={6} width={16} height={5} rx={2} fill="#1c1c22" />
+      <circle cx={0} cy={-14} r={4} fill="var(--fp-water-body)" opacity={0.3} />
+      <rect x={-8} y={6} width={16} height={5} rx={2} fill="var(--fp-water-base)" />
       <rect
         x={-2}
         y={-20}
@@ -374,7 +374,7 @@ function WallLine({
       y1={y1}
       x2={x2}
       y2={y2}
-      stroke={outer ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.10)"}
+      stroke={outer ? "var(--fp-wall-outer)" : "var(--fp-wall-inner)"}
       strokeWidth={outer ? 2.5 : 1.5}
       strokeLinecap="round"
     />
@@ -420,7 +420,7 @@ function WindowIcon({
           y1={y + 1}
           x2={x + w / 2}
           y2={y + h - 1}
-          stroke="rgba(255,255,255,0.08)"
+          stroke="var(--fp-door-stroke)"
           strokeWidth={0.5}
         />
       </g>
@@ -451,7 +451,7 @@ function WindowIcon({
         y1={y + h / 2}
         x2={x + w - 1}
         y2={y + h / 2}
-        stroke="rgba(255,255,255,0.08)"
+        stroke="var(--fp-door-stroke)"
         strokeWidth={0.5}
       />
     </g>
@@ -483,8 +483,8 @@ function DoorIcon({
         width={w}
         height={h}
         rx={1}
-        fill="#1c1c22"
-        stroke="rgba(255,255,255,0.08)"
+        fill="var(--fp-door-fill)"
+        stroke="var(--fp-door-stroke)"
         strokeWidth={1}
       />
     );
@@ -498,8 +498,8 @@ function DoorIcon({
           width={4}
           height={h}
           rx={1}
-          fill="grey"
-          stroke="rgba(255,255,255,0.06)"
+          fill="var(--fp-door-swing)"
+          stroke="var(--fp-furniture-stroke)"
           strokeWidth={0.6}
         />
       )}
@@ -510,7 +510,7 @@ function DoorIcon({
             : `M ${x + w - 2} ${y + h} A ${w} ${h} 0 0 0 ${x} ${y}`
         }
         fill="none"
-        stroke="grey"
+        stroke="var(--fp-door-swing)"
         strokeWidth={0.8}
         strokeDasharray="3 3"
       />
@@ -522,7 +522,7 @@ export function FloorPlan({ devices }: Props) {
   const isOfficeOpen = devices.some((d) => d.status === "on");
   return (
     <div className="h-full rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
-      <div className="relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+      <div className="card-surface relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5">
         <div className="absolute -top-12 -left-12 h-32 w-32 rounded-full bg-accent-purple-dim blur-3xl" />
 
         {/* Header */}
@@ -598,7 +598,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={0}
                 x2={i * 50}
                 y2={H}
-                stroke="rgba(255,255,255,0.012)"
+                stroke="var(--fp-grid)"
                 strokeWidth={0.5}
               />
             ))}
@@ -609,7 +609,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={i * 50}
                 x2={W}
                 y2={i * 50}
-                stroke="rgba(255,255,255,0.012)"
+                stroke="var(--fp-grid)"
                 strokeWidth={0.5}
               />
             ))}
@@ -621,7 +621,7 @@ export function FloorPlan({ devices }: Props) {
               width={sx(35)}
               height={sy(15)}
               rx={0}
-              fill="rgba(200,180,150,0.10)"
+              fill="var(--fp-floor-drawing)"
             />
             {Array.from({ length: 6 }).map((_, i) => (
               <line
@@ -630,7 +630,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={0}
                 x2={i * (sx(35) / 6)}
                 y2={sy(15)}
-                stroke="rgba(200,180,150,0.04)"
+                stroke="var(--fp-floor-drawing-line)"
                 strokeWidth={0.5}
               />
             ))}
@@ -641,7 +641,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={i * (sy(15) / 10)}
                 x2={sx(35)}
                 y2={i * (sy(15) / 10)}
-                stroke="rgba(200,180,150,0.04)"
+                stroke="var(--fp-floor-drawing-line)"
                 strokeWidth={0.5}
               />
             ))}
@@ -652,7 +652,7 @@ export function FloorPlan({ devices }: Props) {
               width={sx(31)}
               height={sy(15)}
               rx={0}
-              fill="rgba(200,200,210,0.08)"
+              fill="var(--fp-floor-work1)"
             />
             {Array.from({ length: 5 }).map((_, i) => (
               <line
@@ -661,7 +661,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={0}
                 x2={sx(35) + i * (sx(31) / 5)}
                 y2={sy(15)}
-                stroke="rgba(200,200,210,0.04)"
+                stroke="var(--fp-floor-work1-line)"
                 strokeWidth={0.5}
               />
             ))}
@@ -672,7 +672,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={i * (sy(15) / 10)}
                 x2={sx(66)}
                 y2={i * (sy(15) / 10)}
-                stroke="rgba(200,200,210,0.04)"
+                stroke="var(--fp-floor-work1-line)"
                 strokeWidth={0.5}
               />
             ))}
@@ -683,7 +683,7 @@ export function FloorPlan({ devices }: Props) {
               width={sx(34)}
               height={sy(15)}
               rx={0}
-              fill="rgba(180,160,130,0.08)"
+              fill="var(--fp-floor-work2)"
             />
             {Array.from({ length: 18 }).map((_, i) => (
               <line
@@ -692,7 +692,7 @@ export function FloorPlan({ devices }: Props) {
                 y1={i * (sy(15) / 18)}
                 x2={W}
                 y2={i * (sy(15) / 18)}
-                stroke="rgba(180,160,130,0.05)"
+                stroke="var(--fp-floor-work2-line)"
                 strokeWidth={0.5}
               />
             ))}
@@ -703,7 +703,7 @@ export function FloorPlan({ devices }: Props) {
               width={W}
               height={sy(0) - sy(15)}
               rx={0}
-              fill="rgba(255,255,255,0.03)"
+              fill="var(--fp-floor-hallway)"
             />
 
             <rect
@@ -713,7 +713,7 @@ export function FloorPlan({ devices }: Props) {
               height={sy(15)}
               rx={8}
               fill="none"
-              stroke="rgba(200,180,150,0.08)"
+              stroke="var(--fp-room-border)"
               strokeWidth={1}
             />
             <rect
@@ -723,7 +723,7 @@ export function FloorPlan({ devices }: Props) {
               height={sy(15)}
               rx={8}
               fill="none"
-              stroke="rgba(200,200,210,0.08)"
+              stroke="var(--fp-room-border)"
               strokeWidth={1}
             />
             <rect
@@ -733,7 +733,7 @@ export function FloorPlan({ devices }: Props) {
               height={sy(15)}
               rx={8}
               fill="none"
-              stroke="rgba(180,160,130,0.08)"
+              stroke="var(--fp-room-border)"
               strokeWidth={1}
             />
 
@@ -856,7 +856,7 @@ export function FloorPlan({ devices }: Props) {
               y1={sy(8)}
               x2={sx(91)}
               y2={sy(2)}
-              stroke="rgba(255,255,255,0.10)"
+              stroke="var(--fp-wall-line)"
               strokeWidth={1.5}
             />
 

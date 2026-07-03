@@ -36,7 +36,7 @@ function CustomTooltip({ active, payload, label }: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const average = payload.find((p: any) => p.dataKey === "avg");
     return (
-      <div className="rounded-xl border border-glass-border bg-onyx/95 px-3 py-2">
+      <div className="rounded-xl border border-glass-border bg-onyx/95 px-3 py-2 shadow-[0_4px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl">
         <p className="text-[10px] font-medium text-text-tertiary">{label}</p>
         <div className="mt-1.5 flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ export function PowerChart({ currentWatts }: Props) {
   return (
     <>
       <div className="h-full rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
-        <div className="relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+        <div className="card-surface relative flex h-full flex-col overflow-hidden rounded-[1.625rem] bg-onyx p-5">
           <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-accent-emerald-dim blur-3xl" />
 
           {/* Header */}
@@ -265,7 +265,7 @@ export function PowerChart({ currentWatts }: Props) {
         createPortal(
           <>
             <div
-              className="fixed inset-0 z-999 bg-void/60 backdrop-blur-sm rounded-4xl"
+              className="fixed inset-0 z-999 bg-void/40 backdrop-blur-sm rounded-4xl"
               onClick={() => setLogsOpen(false)}
             />
             <div className="fixed top-1/2 -translate-y-1/2 left-1/2 z-1000 w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2">

@@ -188,7 +188,7 @@ function App() {
 
       {/* Floating Glass Island Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 md:pt-6">
-        <div className="animate-slide-down flex w-full max-w-5xl items-center justify-between rounded-full border border-glass-border bg-onyx/80 px-4 py-2.5 backdrop-blur-2xl md:px-6 md:py-3">
+        <div className="animate-slide-down nav-glass flex w-full max-w-5xl items-center justify-between rounded-full border border-glass-border bg-onyx/80 px-4 py-2.5 backdrop-blur-2xl md:px-6 md:py-3">
           <div className="flex items-center gap-3">
             <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-accent-emerald-dim to-accent-purple-dim ring-1 ring-accent-emerald/20">
               <svg
@@ -311,7 +311,7 @@ function App() {
       {alertsOpen && createPortal(
         <>
           <div
-            className="fixed inset-0 z-60 bg-void/60 backdrop-blur-sm"
+            className="fixed inset-0 z-60 bg-void/40 backdrop-blur-sm"
             onClick={() => setAlertsOpen(false)}
           />
           <div className="fixed top-20 inset-x-0 z-70 mx-auto w-[calc(100%-2rem)] max-w-md">
@@ -325,7 +325,7 @@ function App() {
       <div
         className={`fixed inset-0 z-40 md:hidden transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           mobileMenuOpen
-            ? "opacity-100 pointer-events-auto bg-void/90 backdrop-blur-3xl"
+            ? "opacity-100 pointer-events-auto bg-void/80 backdrop-blur-3xl"
             : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileMenuOpen(false)}
@@ -382,12 +382,12 @@ function App() {
         {/* SECTION 1: Power Meter + Power Chart */}
         <div
           ref={section1Ref}
-          className="reveal mb-6 grid grid-cols-1 gap-5 lg:grid-cols-3"
+          className="reveal mb-6 grid grid-cols-1 gap-5 md:grid-cols-3"
         >
-          <div className="lg:col-span-1">
+          <div className="md:col-span-1">
             <PowerMeter usage={usage} />
           </div>
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             <PowerChart currentWatts={totalWatts} />
           </div>
         </div>
