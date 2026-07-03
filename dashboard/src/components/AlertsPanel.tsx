@@ -3,9 +3,10 @@ import type { Alert } from "../types";
 interface Props {
   alerts: Alert[];
   onClose?: () => void;
+  onClearAll?: () => void;
 }
 
-export function AlertsPanel({ alerts, onClose }: Props) {
+export function AlertsPanel({ alerts, onClose, onClearAll }: Props) {
   return (
     <div className="overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
       <div className="relative flex flex-col rounded-[1.625rem] bg-onyx shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
@@ -23,16 +24,31 @@ export function AlertsPanel({ alerts, onClose }: Props) {
             </div>
             <h3 className="text-sm font-semibold text-text-primary">Active Alerts</h3>
           </div>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="group flex h-7 w-7 items-center justify-center rounded-full bg-glass-bg ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-accent-red/30"
-            >
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-text-tertiary transition-all duration-500 group-hover:text-accent-red" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          )}
+          <div className="flex items-center gap-1.5">
+            {alerts.length > 0 && onClearAll && (
+              <button
+                onClick={onClearAll}
+                className="group flex h-7 items-center gap-1.5 rounded-full bg-glass-bg px-2.5 ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-accent-red/30"
+              >
+                <svg viewBox="0 0 24 24" className="h-3 w-3 text-text-tertiary transition-all duration-500 group-hover:text-accent-red" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span className="text-[10px] font-medium text-text-tertiary transition-all duration-500 group-hover:text-accent-red">
+                  Clear
+                </span>
+              </button>
+            )}
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="group flex h-7 w-7 items-center justify-center rounded-full bg-glass-bg ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-accent-red/30"
+              >
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-text-tertiary transition-all duration-500 group-hover:text-accent-red" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Alert list */}

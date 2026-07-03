@@ -37,9 +37,32 @@ function useInView(threshold = 0.15) {
   return ref;
 }
 
+const STORAGE_KEY_ALERTS = "alerts_history";
+const ALERT_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour
+
+function loadAlertsFromStorage(): Alert[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ALERTS);
+    if (!raw) return [];
+    const parsed: Alert[] = JSON.parse(raw);
+    const cutoff = Date.now() - ALERT_MAX_AGE_MS;
+    return parsed.filter((a) => new Date(a.created_at).getTime() > cutoff);
+  } catch {
+    return [];
+  }
+}
+
+function saveAlertsToStorage(data: Alert[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY_ALERTS, JSON.stringify(data));
+  } catch {
+    // localStorage full or unavailable
+  }
+}
+
 function App() {
   const [devices, setDevices] = useState<Device[]>([]);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>(() => loadAlertsFromStorage());
   const [connected, setConnected] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
@@ -128,6 +151,15 @@ function App() {
     if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
+  }, []);
+
+  useEffect(() => {
+    saveAlertsToStorage(alerts);
+  }, [alerts]);
+
+  const clearAlerts = useCallback(() => {
+    setAlerts([]);
+    localStorage.removeItem(STORAGE_KEY_ALERTS);
   }, []);
 
   const totalWatts = devices
@@ -283,7 +315,7 @@ function App() {
             onClick={() => setAlertsOpen(false)}
           />
           <div className="fixed top-20 inset-x-0 z-70 mx-auto w-[calc(100%-2rem)] max-w-md">
-            <AlertsPanel alerts={alerts} onClose={() => setAlertsOpen(false)} />
+            <AlertsPanel alerts={alerts} onClose={() => setAlertsOpen(false)} onClearAll={clearAlerts} />
           </div>
         </>,
         document.body

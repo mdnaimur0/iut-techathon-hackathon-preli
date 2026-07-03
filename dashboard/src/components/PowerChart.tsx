@@ -15,6 +15,7 @@ import { LogsPanel } from "./LogsPanel";
 interface PowerPoint {
   time: string;
   watts: number;
+  date: string;
 }
 
 interface ChartDataPoint {
@@ -57,8 +58,34 @@ function CustomTooltip({ active, payload, label }: any) {
   return null;
 }
 
+const STORAGE_KEY_POWER = "powerchart_history";
+
+function getTodayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function loadHistoryFromStorage(): PowerPoint[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_POWER);
+    if (!raw) return [];
+    const parsed: PowerPoint[] = JSON.parse(raw);
+    const today = getTodayKey();
+    return parsed.filter((p) => p.date === today);
+  } catch {
+    return [];
+  }
+}
+
+function saveHistoryToStorage(data: PowerPoint[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY_POWER, JSON.stringify(data));
+  } catch {
+    // localStorage full or unavailable
+  }
+}
+
 export function PowerChart({ currentWatts }: Props) {
-  const [history, setHistory] = useState<PowerPoint[]>([]);
+  const [history, setHistory] = useState<PowerPoint[]>(loadHistoryFromStorage);
   const [logsOpen, setLogsOpen] = useState(false);
   const [logs, setLogs] = useState<ChangeLog[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -81,15 +108,19 @@ export function PowerChart({ currentWatts }: Props) {
     chartData.length > 0 ? chartData[chartData.length - 1].avg : 0;
 
   useEffect(() => {
-    const now = new Date().toLocaleTimeString([], {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
+    const date = now.toISOString().slice(0, 10);
     const timeoutId = window.setTimeout(() => {
       setHistory((prev) => {
-        const next = [...prev, { time: now, watts: currentWatts }];
-        return next.length > 30 ? next.slice(-30) : next;
+        const next = [...prev, { time, watts: currentWatts, date }];
+        const trimmed = next.length > 30 ? next.slice(-30) : next;
+        saveHistoryToStorage(trimmed);
+        return trimmed;
       });
     }, 0);
 

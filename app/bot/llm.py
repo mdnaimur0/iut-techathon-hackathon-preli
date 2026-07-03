@@ -34,7 +34,7 @@ async def humanize(command: str, data: dict | list) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a friendly office assistant bot. Reply in a casual, helpful tone. Keep responses concise (2-4 sentences max). Do not use markdown formatting.",
+                    "content": "You are a friendly office assistant bot. Reply in a casual, helpful and engaging tone. Keep responses very concise and reply in just a single sentence. Do not use markdown formatting.",
                 },
                 {"role": "user", "content": prompt},
             ],
