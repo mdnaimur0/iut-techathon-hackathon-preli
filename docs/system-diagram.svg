@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="1000" height="600" fill="#09090b" rx="12"/>
+
+  <!-- Title -->
+  <text x="500" y="40" text-anchor="middle" font-size="20" font-weight="700" fill="#f4f4f5">Office Energy Monitor — System Architecture</text>
+  <text x="500" y="60" text-anchor="middle" font-size="12" fill="#71717a">Single FastAPI process — One source of truth</text>
+
+  <!-- SIMULATED DEVICES (left) -->
+  <rect x="30" y="100" width="160" height="200" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+  <text x="110" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#a1a1aa">Simulated Devices</text>
+  <text x="110" y="148" text-anchor="middle" font-size="11" fill="#71717a">15 devices</text>
+  <text x="110" y="168" text-anchor="middle" font-size="11" fill="#71717a">3 rooms × 5 each</text>
+
+  <!-- Device icons -->
+  <g transform="translate(50, 180)">
+    <rect width="45" height="30" rx="4" fill="#27272a" stroke="#3f3f46"/>
+    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#facc15">💡×3</text>
+    <text x="22" y="40" text-anchor="middle" font-size="8" fill="#52525b">Lights</text>
+  </g>
+  <g transform="translate(110, 180)">
+    <rect width="45" height="30" rx="4" fill="#27272a" stroke="#3f3f46"/>
+    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#34d399">🌀×2</text>
+    <text x="22" y="40" text-anchor="middle" font-size="8" fill="#52525b">Fans</text>
+  </g>
+
+  <text x="110" y="250" text-anchor="middle" font-size="10" fill="#52525b">Drawing Room</text>
+  <text x="110" y="265" text-anchor="middle" font-size="10" fill="#52525b">Work Room 1</text>
+  <text x="110" y="280" text-anchor="middle" font-size="10" fill="#52525b">Work Room 2</text>
+
+  <!-- Arrow: Devices → FastAPI -->
+  <line x1="195" y1="200" x2="260" y2="200" stroke="#3f3f46" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- FASTAPI BOX (center) -->
+  <rect x="265" y="85" width="420" height="280" rx="10" fill="#18181b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="475" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#60a5fa">FastAPI (Single Process)</text>
+
+  <!-- Internal components -->
+  <!-- Simulator -->
+  <rect x="285" y="130" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="345" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Simulator</text>
+  <text x="345" y="168" text-anchor="middle" font-size="9" fill="#64748b">asyncio task</text>
+
+  <!-- Store -->
+  <rect x="420" y="130" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="480" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">In-Memory Store</text>
+  <text x="480" y="168" text-anchor="middle" font-size="9" fill="#64748b">SOURCE OF TRUTH</text>
+
+  <!-- Arrow: Simulator → Store -->
+  <line x1="405" y1="155" x2="420" y2="155" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
+
+  <!-- Services -->
+  <rect x="285" y="200" width="255" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="412" y="225" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">services.py — get_state / get_room / get_usage / get_alerts</text>
+
+  <!-- Arrow: Store → Services -->
+  <line x1="480" y1="180" x2="480" y2="200" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
+
+  <!-- Alert Engine -->
+  <rect x="285" y="255" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="345" y="278" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Alert Engine</text>
+  <text x="345" y="292" text-anchor="middle" font-size="9" fill="#64748b">after-hours / 2h rule</text>
+
+  <!-- DB -->
+  <rect x="420" y="255" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="480" y="278" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">SQLite (kWh)</text>
+
+  <!-- API -->
+  <rect x="560" y="130" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="615" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">REST API</text>
+  <text x="615" y="168" text-anchor="middle" font-size="9" fill="#64748b">/api/*</text>
+
+  <!-- WebSocket -->
+  <rect x="560" y="200" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="615" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">WebSocket</text>
+  <text x="615" y="238" text-anchor="middle" font-size="9" fill="#64748b">/ws (broadcast)</text>
+
+  <!-- Bot -->
+  <rect x="560" y="265" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="615" y="287" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Discord Bot</text>
+  <text x="615" y="303" text-anchor="middle" font-size="9" fill="#64748b">discord.py task</text>
+
+  <!-- Frontend serving -->
+  <rect x="285" y="310" width="385" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="477" y="335" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">app.frontend("/", directory="dashboard/dist")</text>
+
+  <!-- ARROWS OUT (right side) -->
+  <!-- API → Dashboard -->
+  <line x1="680" y1="155" x2="770" y2="145" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <!-- WS → Dashboard -->
+  <line x1="680" y1="225" x2="770" y2="215" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <!-- Bot → Discord -->
+  <line x1="680" y1="290" x2="770" y2="310" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <!-- DASHBOARD (right top) -->
+  <rect x="775" y="100" width="195" height="170" rx="10" fill="#18181b" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="872" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#4ade80">Web Dashboard</text>
+  <text x="872" y="148" text-anchor="middle" font-size="10" fill="#71717a">React + Vite + TS</text>
+  <text x="872" y="168" text-anchor="middle" font-size="10" fill="#71717a">TailwindCSS + Recharts</text>
+  <text x="872" y="190" text-anchor="middle" font-size="10" fill="#71717a">• Device Status Grid</text>
+  <text x="872" y="206" text-anchor="middle" font-size="10" fill="#71717a">• Power Consumption Meter</text>
+  <text x="872" y="222" text-anchor="middle" font-size="10" fill="#71717a">• Interactive Floor Plan</text>
+  <text x="872" y="238" text-anchor="middle" font-size="10" fill="#71717a">• Alerts Panel</text>
+  <text x="872" y="254" text-anchor="middle" font-size="10" fill="#71717a">• Power Trend Chart</text>
+
+  <!-- DISCORD (right bottom) -->
+  <rect x="775" y="290" width="195" height="100" rx="10" fill="#18181b" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="872" y="315" text-anchor="middle" font-size="13" font-weight="600" fill="#c084fc">Discord Bot</text>
+  <text x="872" y="338" text-anchor="middle" font-size="10" fill="#71717a">!status — all rooms overview</text>
+  <text x="872" y="354" text-anchor="middle" font-size="10" fill="#71717a">!room &lt;name&gt; — room detail</text>
+  <text x="872" y="370" text-anchor="middle" font-size="10" fill="#71717a">!usage — power metrics</text>
+
+  <!-- USER -->
+  <rect x="820" y="430" width="110" height="50" rx="10" fill="#27272a" stroke="#52525b" stroke-width="1.5"/>
+  <text x="875" y="458" text-anchor="middle" font-size="13" font-weight="600" fill="#d4d4d8">User</text>
+  <text x="875" y="475" text-anchor="middle" font-size="10" fill="#71717a">Boss / Team</text>
+
+  <!-- Dashboard → User -->
+  <line x1="872" y1="270" x2="872" y2="430" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 2"/>
+  <!-- Discord → User -->
+  <line x1="872" y1="390" x2="872" y2="430" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 2"/>
+
+  <!-- Single process callout -->
+  <rect x="265" y="370" width="420" height="30" rx="6" fill="#1e3a5f" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="475" y="390" text-anchor="middle" font-size="10" font-weight="500" fill="#60a5fa">Single uvicorn process — one command: uvicorn app.main:app</text>
+
+  <!-- Legend -->
+  <rect x="30" y="430" width="200" height="120" rx="8" fill="#18181b" stroke="#27272a"/>
+  <text x="130" y="452" text-anchor="middle" font-size="11" font-weight="600" fill="#a1a1aa">Legend</text>
+  <line x1="50" y1="468" x2="80" y2="468" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="90" y="472" font-size="10" fill="#71717a">HTTP + WebSocket</text>
+  <line x1="50" y1="490" x2="80" y2="490" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="90" y="494" font-size="10" fill="#71717a">Discord API</text>
+  <line x1="50" y1="512" x2="80" y2="512" stroke="#334155" stroke-width="1.5"/>
+  <text x="90" y="516" font-size="10" fill="#71717a">Internal data flow</text>
+  <line x1="50" y1="534" x2="80" y2="534" stroke="#334155" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="90" y="538" font-size="10" fill="#71717a">Served frontend</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3f3f46"/>
+    </marker>
+    <marker id="arrow-sm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+    </marker>
+  </defs>
+</svg>
