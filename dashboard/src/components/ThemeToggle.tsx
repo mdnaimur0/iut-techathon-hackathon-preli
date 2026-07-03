@@ -7,13 +7,13 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="group relative flex h-8 w-8 items-center justify-center rounded-full ring-1 ring-(--color-glass-border) transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-(--color-accent-emerald)/30"
+      className="group relative flex h-8 w-8 items-center justify-center rounded-full ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-accent-emerald/30"
     >
-      <span className="absolute inset-0 rounded-full bg-(--color-glass-bg) transition-all duration-500 group-hover:bg-(--color-accent-emerald-dim)" />
+      <span className="absolute inset-0 rounded-full bg-glass-bg transition-all duration-500 group-hover:bg-accent-emerald-dim" />
       {isDark ? (
         <svg
           viewBox="0 0 24 24"
-          className="relative h-3.5 w-3.5 text-(--color-text-secondary) transition-all duration-500 group-hover:text-(--color-accent-emerald) group-hover:scale-110"
+          className="relative h-3.5 w-3.5 text-text-secondary transition-all duration-500 group-hover:text-accent-emerald group-hover:scale-110"
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}
@@ -23,7 +23,7 @@ export function ThemeToggle() {
       ) : (
         <svg
           viewBox="0 0 24 24"
-          className="relative h-3.5 w-3.5 text-(--color-text-secondary) transition-all duration-500 group-hover:text-(--color-accent-amber) group-hover:scale-110"
+          className="relative h-3.5 w-3.5 text-text-secondary transition-all duration-500 group-hover:text-accent-amber group-hover:scale-110"
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}

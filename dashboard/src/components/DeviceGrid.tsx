@@ -62,8 +62,8 @@ export function DeviceGrid({ devices }: Props) {
                   </h3>
                 </div>
                 <div className="flex items-center gap-1 rounded-full bg-glass-bg px-2 py-0.5 ring-1 ring-glass-border">
-                  <span className="h-0.5 w-0.5 rounded-full bg-accent-emerald" />
-                  <span className="text-[9px] font-semibold text-text-secondary">
+                  <span className="size-1.5 rounded-full bg-accent-emerald" />
+                  <span className="text-[10px] font-semibold text-text-secondary">
                     {onCount}/{room.devices.length}
                   </span>
                 </div>
