@@ -9,25 +9,25 @@ export function DeviceCard({ device }: Props) {
   const isFan = device.type === "fan";
 
   return (
-    <div className="animate-fade-in-scale group relative">
+    <div className="group relative">
       <div
-        className={`relative rounded-xl p-px transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+        className={`relative rounded-xl p-px transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           isOn
-            ? "bg-gradient-to-br from-emerald-500/25 via-emerald-500/8 to-transparent"
-            : "bg-white/[0.04]"
+            ? "bg-linear-to-br from-accent-emerald/25 via-accent-emerald/8 to-transparent"
+            : "bg-glass-border"
         }`}
       >
         <div
-          className={`relative overflow-hidden rounded-[calc(0.75rem-1px)] px-3 py-2.5 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          className={`relative overflow-hidden rounded-[calc(0.75rem-1px)] px-3 py-2.5 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
             isOn
-              ? "bg-[#0e0e11]/90"
-              : "bg-[#0e0e11]/70"
+              ? "bg-onyx/90 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]"
+              : "bg-onyx/70"
           }`}
         >
           {isOn && (
             <div
               className={`absolute -top-6 -right-6 h-16 w-16 rounded-full blur-2xl ${
-                isFan ? "bg-emerald-500/12" : "bg-amber-500/12"
+                isFan ? "bg-accent-emerald-dim" : "bg-accent-amber-dim"
               }`}
             />
           )}
@@ -35,18 +35,18 @@ export function DeviceCard({ device }: Props) {
           <div className="relative flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <div
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-500 ${
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-700 ${
                   isOn
                     ? isFan
-                      ? "bg-emerald-500/10 ring-1 ring-emerald-500/20"
-                      : "bg-amber-500/10 ring-1 ring-amber-500/20"
-                    : "bg-white/[0.03] ring-1 ring-white/[0.04]"
+                      ? "bg-accent-emerald-dim ring-1 ring-accent-emerald/20"
+                      : "bg-accent-amber-dim ring-1 ring-accent-amber/20"
+                    : "bg-glass-bg ring-1 ring-glass-border"
                 }`}
               >
                 {isFan ? (
                   <svg
                     viewBox="0 0 24 24"
-                    className={`h-4 w-4 ${isOn ? "text-emerald-400" : "text-[#5a5a6e]"} ${isOn ? "animate-spin" : ""}`}
+                    className={`h-4 w-4 ${isOn ? "text-accent-emerald" : "text-text-tertiary"} ${isOn ? "animate-spin" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={1.5}
@@ -57,7 +57,7 @@ export function DeviceCard({ device }: Props) {
                 ) : (
                   <svg
                     viewBox="0 0 24 24"
-                    className={`h-4 w-4 ${isOn ? "text-amber-400" : "text-[#5a5a6e]"}`}
+                    className={`h-4 w-4 ${isOn ? "text-accent-amber" : "text-text-tertiary"}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={1.5}
@@ -68,9 +68,11 @@ export function DeviceCard({ device }: Props) {
               </div>
 
               <div className="min-w-0">
-                <p className="truncate text-[13px] font-semibold text-[#f0f0f5]">{device.name}</p>
-                <p className="text-[10px] font-medium text-[#5a5a6e]">
-                  {isFan ? "Fan" : "Light"} · {device.watts}W
+                <p className="truncate text-[13px] font-semibold text-text-primary">
+                  {device.name}
+                </p>
+                <p className="text-[10px] font-medium text-text-tertiary">
+                  {isFan ? "Fan" : "Light"} &middot; {device.watts}W
                 </p>
               </div>
             </div>
@@ -78,31 +80,36 @@ export function DeviceCard({ device }: Props) {
             <div className="flex items-center gap-1.5 shrink-0">
               <span
                 className={`text-[9px] font-semibold uppercase tracking-wider ${
-                  isOn ? "text-emerald-400" : "text-[#5a5a6e]"
+                  isOn ? "text-accent-emerald" : "text-text-tertiary"
                 }`}
               >
                 {isOn ? "ON" : "OFF"}
               </span>
               <div className="relative">
                 <span
-                  className={`block h-1.5 w-1.5 rounded-full transition-all duration-500 ${
-                    isOn ? "bg-emerald-400" : "bg-[#3a3a47]"
+                  className={`block h-1.5 w-1.5 rounded-full transition-all duration-700 ${
+                    isOn ? "bg-accent-emerald" : "bg-slate-mid"
                   }`}
                 />
                 {isOn && (
-                  <span className="absolute inset-0 h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400 opacity-40" />
+                  <span className="absolute inset-0 h-1.5 w-1.5 animate-ping rounded-full bg-accent-emerald opacity-40" />
                 )}
               </div>
             </div>
           </div>
 
-          {/* Timestamp — slim inline */}
           <div className="relative mt-1.5 flex items-center gap-1">
-            <svg className="h-2.5 w-2.5 text-[#3a3a47]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <svg
+              className="h-2.5 w-2.5 text-slate-mid"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
               <circle cx="12" cy="12" r="10" />
               <polyline points="12,6 12,12 16,14" />
             </svg>
-            <span className="text-[9px] font-medium text-[#3a3a47]">
+            <span className="text-[9px] font-medium text-slate-mid)">
               {new Date(device.last_changed).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",

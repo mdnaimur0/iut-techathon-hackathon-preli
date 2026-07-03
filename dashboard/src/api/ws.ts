@@ -92,27 +92,3 @@ export function subscribeDisconnect(fn: ConnectListener): () => void {
 export function getLatestDevices(): Device[] {
   return latestDevices;
 }
-
-export function startWS() {
-  connect();
-}
-
-export function subscribeDevices(fn: Listener): () => void {
-  listeners.push(fn);
-  return () => {
-    const idx = listeners.indexOf(fn);
-    if (idx >= 0) listeners.splice(idx, 1);
-  };
-}
-
-export function subscribeAlerts(fn: AlertListener): () => void {
-  alertListeners.push(fn);
-  return () => {
-    const idx = alertListeners.indexOf(fn);
-    if (idx >= 0) alertListeners.splice(idx, 1);
-  };
-}
-
-export function getLatestDevices(): Device[] {
-  return latestDevices;
-}

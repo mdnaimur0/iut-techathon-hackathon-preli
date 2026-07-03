@@ -2,78 +2,78 @@ import type { Alert } from "../types";
 
 interface Props {
   alerts: Alert[];
+  onClose?: () => void;
 }
 
-export function AlertsPanel({ alerts }: Props) {
+export function AlertsPanel({ alerts, onClose }: Props) {
   return (
-    <div className="flex h-full flex-col rounded-3xl bg-[#0e0e11]/60 p-px ring-1 ring-white/[0.04] backdrop-blur-sm">
-      <div className="relative flex flex-1 flex-col overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#0e0e11]/80 p-5">
-        {/* Background glow */}
+    <div className="overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
+      <div className="relative flex flex-col rounded-[1.625rem] bg-onyx shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
         {alerts.length > 0 && (
-          <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-red-500/5 blur-3xl" />
+          <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-accent-red-dim blur-3xl" />
         )}
 
         {/* Header */}
-        <div className="relative mb-4 flex items-center justify-between">
+        <div className="relative flex items-center justify-between border-b border-glass-border px-4 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.04] ring-1 ring-white/[0.05]">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-[#5a5a6e]" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-red-dim ring-1 ring-accent-red/20">
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-accent-red" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </div>
-            <h3 className="text-sm font-semibold text-[#f0f0f5]">Active Alerts</h3>
+            <h3 className="text-sm font-semibold text-text-primary">Active Alerts</h3>
           </div>
-          {alerts.length > 0 && (
-            <div className="flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 ring-1 ring-red-500/20">
-              <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
-              <span className="text-[10px] font-semibold text-red-400">{alerts.length}</span>
-            </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="group flex h-7 w-7 items-center justify-center rounded-full bg-glass-bg ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.92] hover:ring-accent-red/30"
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-text-tertiary transition-all duration-500 group-hover:text-accent-red" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
           )}
         </div>
 
         {/* Alert list */}
-        <div className="relative flex-1 overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
+        <div className="relative max-h-[60vh] overflow-y-auto p-3 overflow-x-hidden" style={{ scrollbarGutter: "stable" }}>
           {alerts.length === 0 ? (
-            <div className="animate-fade-in flex min-h-[120px] flex-1 items-center justify-center">
+            <div className="flex min-h-30 flex-1 items-center justify-center py-8">
               <div className="flex flex-col items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.03] ring-1 ring-white/[0.04]">
-                  <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#3a3a47]" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-glass-bg ring-1 ring-glass-border">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-mid" fill="none" stroke="currentColor" strokeWidth={1.5}>
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <p className="text-xs font-medium text-[#3a3a47]">All clear</p>
+                <p className="text-xs font-medium text-slate-mid">All clear</p>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="space-y-2">
               {alerts.map((alert) => (
                 <div
                   key={alert.id}
-                  className="animate-fade-in-scale group/alert relative overflow-hidden rounded-2xl bg-white/[0.02] p-px ring-1 ring-white/[0.04] transition-all duration-500 hover:ring-white/[0.08]"
+                  className="group/alert rounded-[1.25rem] bg-glass-bg p-1 ring-1 ring-glass-border transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-accent-red-dim/3"
                 >
-                  <div className="relative rounded-[calc(1rem-1px)] p-3">
-                    {/* Severity glow */}
+                  <div className="relative rounded-2xl p-3">
                     <div
                       className={`absolute -top-6 -right-6 h-16 w-16 rounded-full blur-2xl ${
-                        alert.severity === "critical" ? "bg-red-500/10" : "bg-amber-500/10"
+                        alert.severity === "critical" ? "bg-accent-red-dim" : "bg-accent-amber-dim"
                       }`}
                     />
 
                     <div className="relative flex items-start justify-between gap-2">
                       <div className="flex items-start gap-2.5">
-                        {/* Severity icon */}
                         <div
                           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${
                             alert.severity === "critical"
-                              ? "bg-red-500/10 ring-1 ring-red-500/20"
-                              : "bg-amber-500/10 ring-1 ring-amber-500/20"
+                              ? "bg-accent-red-dim ring-1 ring-accent-red/20"
+                              : "bg-accent-amber-dim ring-1 ring-accent-amber/20"
                           }`}
                         >
                           <svg
                             viewBox="0 0 24 24"
-                            className={`h-3 w-3 ${
-                              alert.severity === "critical" ? "text-red-400" : "text-amber-400"
-                            }`}
+                            className={`h-3 w-3 ${alert.severity === "critical" ? "text-accent-red" : "text-accent-amber"}`}
                             fill="none"
                             stroke="currentColor"
                             strokeWidth={2}
@@ -82,10 +82,10 @@ export function AlertsPanel({ alerts }: Props) {
                           </svg>
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[11px] font-medium leading-relaxed text-[#8e8ea0]">
+                          <p className="text-[11px] font-medium leading-relaxed text-text-secondary">
                             {alert.message}
                           </p>
-                          <p className="mt-1 text-[9px] font-medium text-[#3a3a47]">
+                          <p className="mt-1 text-[9px] font-medium text-text-tertiary">
                             {new Date(alert.created_at).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -96,8 +96,8 @@ export function AlertsPanel({ alerts }: Props) {
                       <span
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${
                           alert.severity === "critical"
-                            ? "bg-red-500/10 text-red-400 ring-1 ring-red-500/20"
-                            : "bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20"
+                            ? "bg-accent-red-dim text-accent-red ring-1 ring-accent-red/20"
+                            : "bg-accent-amber-dim text-accent-amber ring-1 ring-accent-amber/20"
                         }`}
                       >
                         {alert.severity}

@@ -1,6 +1,33 @@
 @import "tailwindcss";
 
-:root {
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-void: var(--color-void);
+  --color-obsidian: var(--color-obsidian);
+  --color-onyx: var(--color-onyx);
+  --color-carbon: var(--color-carbon);
+  --color-graphite: var(--color-graphite);
+  --color-slate-dim: var(--color-slate-dim);
+  --color-slate-mid: var(--color-slate-mid);
+  --color-slate-bright: var(--color-slate-bright);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-accent-emerald: var(--color-accent-emerald);
+  --color-accent-emerald-dim: var(--color-accent-emerald-dim);
+  --color-accent-purple: var(--color-accent-purple);
+  --color-accent-purple-dim: var(--color-accent-purple-dim);
+  --color-accent-amber: var(--color-accent-amber);
+  --color-accent-amber-dim: var(--color-accent-amber-dim);
+  --color-accent-red: var(--color-accent-red);
+  --color-accent-red-dim: var(--color-accent-red-dim);
+  --color-glass-border: var(--color-glass-border);
+  --color-glass-bg: var(--color-glass-bg);
+}
+
+:root,
+[data-theme="dark"] {
   --color-void: #030303;
   --color-obsidian: #08080a;
   --color-onyx: #0e0e11;
@@ -22,10 +49,36 @@
   --color-accent-red-dim: rgba(248, 113, 113, 0.10);
   --color-glass-border: rgba(255, 255, 255, 0.06);
   --color-glass-bg: rgba(255, 255, 255, 0.03);
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --mesh-1: rgba(52, 211, 153, 0.06);
+  --mesh-2: rgba(167, 139, 250, 0.05);
+  --mesh-3: rgba(52, 211, 153, 0.02);
+}
+
+[data-theme="light"] {
+  --color-void: #f4f2ee;
+  --color-obsidian: #faf9f7;
+  --color-onyx: #ffffff;
+  --color-carbon: #eae7e2;
+  --color-graphite: #d5d2cd;
+  --color-slate-dim: #b0adab;
+  --color-slate-mid: #8f8c8a;
+  --color-slate-bright: #656260;
+  --color-text-primary: #1a1817;
+  --color-text-secondary: #6b6967;
+  --color-text-tertiary: #837f7c;
+  --color-accent-emerald: #059669;
+  --color-accent-emerald-dim: rgba(5, 150, 105, 0.12);
+  --color-accent-purple: #7c3aed;
+  --color-accent-purple-dim: rgba(124, 58, 237, 0.12);
+  --color-accent-amber: #d97706;
+  --color-accent-amber-dim: rgba(217, 119, 6, 0.12);
+  --color-accent-red: #dc2626;
+  --color-accent-red-dim: rgba(220, 38, 38, 0.12);
+  --color-glass-border: rgba(0, 0, 0, 0.06);
+  --color-glass-bg: rgba(0, 0, 0, 0.04);
+  --mesh-1: rgba(5, 150, 105, 0.08);
+  --mesh-2: rgba(124, 58, 237, 0.06);
+  --mesh-3: rgba(249, 115, 22, 0.04);
 }
 
 html {
@@ -37,13 +90,15 @@ body {
   background: var(--color-void);
   color: var(--color-text-primary);
   overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Premium scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -58,19 +113,17 @@ body {
   background: var(--color-slate-mid);
 }
 
-/* Radial mesh gradient background */
 .mesh-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(52, 211, 153, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 85% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(52, 211, 153, 0.02) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 50% at 15% 20%, var(--mesh-1) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 75%, var(--mesh-2) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, var(--mesh-3) 0%, transparent 60%);
 }
 
-/* Film grain overlay */
 .grain-overlay {
   position: fixed;
   inset: 0;
@@ -82,7 +135,10 @@ body {
   background-size: 128px 128px;
 }
 
-/* Glow keyframes */
+[data-theme="light"] .grain-overlay {
+  opacity: 0.012;
+}
+
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.15); }
@@ -110,11 +166,10 @@ body {
 }
 
 .animate-bell-ring {
-  animation: bell-ring 0.6s ease-in-out;
+  animation: bell-ring 0.6s cubic-bezier(0.32, 0.72, 0, 1);
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.4), 0 0 24px rgba(239, 68, 68, 0.15);
 }
 
-/* ─── Mount / Entrance animations (replaces framer-motion) ─── */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
@@ -140,7 +195,7 @@ body {
   animation: fade-in-up 0.8s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+  animation: fade-in 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 .animate-fade-in-scale {
   animation: fade-in-scale 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards;
@@ -149,10 +204,9 @@ body {
   animation: slide-down 0.8s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 .animate-count-pulse {
-  animation: count-pulse 0.3s ease-out forwards;
+  animation: count-pulse 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
-/* Animation delay utilities (for stagger effects) */
 .delay-100 { animation-delay: 100ms; transition-delay: 100ms; }
 .delay-150 { animation-delay: 150ms; transition-delay: 150ms; }
 .delay-200 { animation-delay: 200ms; transition-delay: 200ms; }
@@ -165,10 +219,11 @@ body {
 .delay-700 { animation-delay: 700ms; transition-delay: 700ms; }
 .delay-800 { animation-delay: 800ms; transition-delay: 800ms; }
 .delay-900 { animation-delay: 900ms; transition-delay: 900ms; }
+
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  filter: blur(6px);
+  transform: translateY(30px);
+  filter: blur(8px);
   transition: all 0.9s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .reveal.visible {
@@ -177,3 +232,9 @@ body {
   filter: blur(0);
 }
 
+[data-theme="light"] .reveal {
+  filter: blur(6px);
+}
+[data-theme="light"] .reveal.visible {
+  filter: blur(0);
+}
