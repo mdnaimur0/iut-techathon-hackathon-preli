@@ -4,6 +4,15 @@
 
 A real-time office energy monitoring system with a live web dashboard and Discord bot. Monitor all 15 electrical devices (fans and lights) across 3 office rooms through both a web interface and Discord commands.
 
+## Quick Testing (for Judges)
+
+| What                           | Link                                                                                                                                |
+| :----------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| Live Dashboard                 | **https://loadwatch.mdnaimurrahman.com**                                                                                            |
+| Add Discord Bot to your server | **[Invite Bot](https://discord.com/oauth2/authorize?client_id=1522635268811788308&permissions=67584&integration_type=0&scope=bot)** |
+
+No setup required. The dashboard is live and the bot is already running. Just open the dashboard URL or click the invite link to add the bot to any Discord server you control, then try commands like `!status`, `!room drawing`, `!usage`, and `!alerts`.
+
 ## Architecture
 
 Everything runs in a **single FastAPI process** — the simulator, in-memory store, alert engine, REST/WebSocket API, served frontend, and Discord bot.
@@ -166,7 +175,7 @@ Open http://localhost:8000 — dashboard + API + WebSocket + Discord bot, all in
 ## Project Structure
 
 ```
-techathon-hackathon-preli/
+iut-techathon-hackathon-preli/
 ├── pyproject.toml           # uv-managed dependencies
 ├── uv.lock                  # lockfile
 ├── .python-version          # Python 3.12
