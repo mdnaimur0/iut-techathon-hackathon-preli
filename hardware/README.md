@@ -2,63 +2,69 @@
 
 ## Overview
 
-This directory contains a Wokwi-compatible circuit that demonstrates how the office devices would be wired and sensed in real life. The circuit models **one room** (Work Room 1) with 2 fans and 3 lights.
+This directory contains a Wokwi-compatible circuit that demonstrates how office devices would be sensed and monitored in real life. The circuit models **one room** (Drawing Room) with 2 fans and 3 lights, each toggled by a physical slide switch.
 
 ## Components
 
-| Component | Quantity | Purpose |
-|:----------|:--------:|:--------|
-| ESP32 DevKit V1 | 1 | Microcontroller — reads switch states, controls outputs, reads current |
-| LED (yellow) | 3 | Represent 3 lights in the room |
-| Servo motor | 2 | Represent 2 fans (spins when ON) |
-| 220Ω resistor | 3 | Current limiting for LEDs |
-| Slide switch | 5 | Manual on/off input for each device |
-| ACS712 current sensor | 1 | Measures total current draw of the room |
-| Buzzer | 1 | Audio alert for after-hours or overload conditions |
+| Component       | Quantity | Purpose                                                                              |
+| :-------------- | :------: | :----------------------------------------------------------------------------------- |
+| ESP32 DevKit V1 |    1     | Microcontroller — reads switch states, drives status LEDs, reports power over serial |
+| Slide switch    |    5     | Manual on/off input for each device                                                  |
+| 220Ω resistor   |    5     | Current limiting for status LEDs                                                     |
+| LED (yellow)    |    3     | Status indicator for 3 lights                                                        |
+| LED (blue)      |    2     | Status indicator for 2 fans                                                          |
 
 ## Pin Mapping
 
-| Device | GPIO (Output/Input) | Function |
-|:-------|:-------------------:|:---------|
-| Light 1 | GPIO 25 | LED output |
-| Light 2 | GPIO 26 | LED output |
-| Light 3 | GPIO 27 | LED output |
-| Fan 1 | GPIO 13 | Servo PWM output |
-| Fan 2 | GPIO 14 | Servo PWM output |
-| Switch 1-5 | GPIO 32-36 | Digital input (pull-up) |
-| ACS712 OUT | GPIO 39 | Analog input (ADC1_CH7) |
-| Buzzer | GPIO 15 | Digital output |
+### Switch Inputs (INPUT_PULLDOWN)
+
+| Device         |  GPIO   | Role          |
+| :------------- | :-----: | :------------ |
+| Light 1 switch | GPIO 13 | Digital input |
+| Light 2 switch | GPIO 12 | Digital input |
+| Light 3 switch | GPIO 14 | Digital input |
+| Fan 1 switch   | GPIO 27 | Digital input |
+| Fan 2 switch   | GPIO 26 | Digital input |
+
+### LED Outputs
+
+| Device  |  GPIO   | LED Color |
+| :------ | :-----: | :-------- |
+| Light 1 | GPIO 18 | Yellow    |
+| Light 2 | GPIO 19 | Yellow    |
+| Light 3 | GPIO 21 | Yellow    |
+| Fan 1   | GPIO 22 | Blue      |
+| Fan 2   | GPIO 23 | Blue      |
 
 ## How It Maps to the Software Model
 
-The firmware reads the physical switch states and outputs a JSON payload that matches the software simulator's device shape:
+The firmware reads each switch, mirrors the state to the corresponding LED, and emits a JSON payload every second:
 
 ```json
 {
-  "room": "work1",
+  "room": "Drawing Room",
   "devices": [
-    {"id": "work1-light-1", "name": "Light 1", "type": "light", "status": "on", "watts": 15},
-    {"id": "work1-light-2", "name": "Light 2", "type": "light", "status": "off", "watts": 15},
-    {"id": "work1-light-3", "name": "Light 3", "type": "light", "status": "on", "watts": 15},
-    {"id": "work1-fan-1", "name": "Fan 1", "type": "fan", "status": "on", "watts": 60},
-    {"id": "work1-fan-2", "name": "Fan 2", "type": "fan", "status": "off", "watts": 60}
+    { "name": "Light 1", "status": "on", "power": 15 },
+    { "name": "Light 2", "status": "off", "power": 0 },
+    { "name": "Light 3", "status": "on", "power": 15 },
+    { "name": "Fan 1", "status": "on", "power": 60 },
+    { "name": "Fan 2", "status": "off", "power": 0 }
   ],
-  "current_amps": 0.45,
-  "timestamp": 12345
+  "totalPower": 90
 }
 ```
 
+- `status` — `"on"` when the switch is HIGH, `"off"` otherwise.
+- `power` — rated wattage (lights: 15 W, fans: 60 W) when on, 0 when off.
+- `totalPower` — sum of all device wattages in the room.
+
 ## Wiring Explanation
 
-1. **Lights (LEDs):** Each LED is connected to an ESP32 GPIO pin through a 220Ω current-limiting resistor. When the GPIO goes HIGH, the light turns ON — mirroring the `status: "on"` state in the software.
+1. **Switches:** Each slide switch connects a GPIO pin to 3V3. The ESP32 uses `INPUT_PULLDOWN`, so an open switch reads LOW and a closed switch reads HIGH. The switch output drives the input pin; no external pull-down resistor is needed.
 
-2. **Fans (Servos):** Servo motors are driven by PWM signals from the ESP32. When the corresponding switch is ON, the servo spins continuously, representing a running fan.
+2. **Status LEDs:** Each LED is wired from its GPIO through a 220Ω resistor to GND. The firmware mirrors the switch state to the LED, giving immediate visual feedback of each device.
 
-3. **Switches:** Each device has a slide switch connected to a GPIO pin with internal pull-up. When the switch is closed (LOW), the device is ON. This simulates the physical act of toggling a light or fan.
-
-4. **ACS712 Current Sensor:** The sensor sits on the main power line and measures the total current draw of all devices in the room. The ESP32 reads the analog output and converts it to amperes, providing real power consumption data that maps to the `watts` field in the software model.
-
-5. **Buzzer:** Activated by the ESP32 when alert conditions are detected (e.g., all devices ON after hours), providing a physical audio warning.
+3. **Serial Output:** The ESP32 prints one JSON object per second at 115200 baud to the hardware serial monitor, enabling the backend to parse room-level power data.
 
 ## Running in Wokwi
 
@@ -68,4 +74,4 @@ The firmware reads the physical switch states and outputs a JSON payload that ma
 4. Copy `sketch.ino` as `main.ino`
 5. Click "Start" to simulate
 
-The serial output will print a JSON payload every 5 seconds showing the current device states and current draw.
+Toggle the slide switches to turn devices on/off. The serial monitor will print a JSON status report every second showing device states and total power draw.
