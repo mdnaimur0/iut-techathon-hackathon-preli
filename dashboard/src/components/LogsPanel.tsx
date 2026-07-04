@@ -4,6 +4,7 @@ import { ROOM_NAMES } from "../types";
 interface Props {
   logs: ChangeLog[];
   onClose?: () => void;
+  inline?: boolean;
 }
 
 function formatRoom(room: string): string {
@@ -22,19 +23,41 @@ function formatTime(iso: string): string {
   }
 }
 
-export function LogsPanel({ logs, onClose }: Props) {
+export function LogsPanel({ logs, onClose, inline }: Props) {
   return (
-    <div className="overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border">
-      <div className="card-surface relative flex flex-col rounded-[1.625rem] bg-onyx">
-        <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-accent-purple-dim blur-3xl" />
+    <div
+      className={
+        inline
+          ? ""
+          : "overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border"
+      }
+    >
+      <div
+        className={
+          inline
+            ? "rounded-3xl bg-glass-bg p-1.5 ring-1 ring-glass-border"
+            : "card-surface relative flex flex-col rounded-[1.625rem] bg-onyx"
+        }
+      >
+        {!inline && (
+          <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-accent-purple-dim blur-3xl" />
+        )}
 
         {/* Header */}
-        <div className="relative flex items-center justify-between border-b border-glass-border px-4 py-4">
+        <div
+          className={`relative flex items-center justify-between border-b border-glass-border ${
+            inline ? "px-5 py-4 md:px-6 md:py-5" : "px-4 py-4"
+          }`}
+        >
           <div className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-purple-dim ring-1 ring-accent-purple/20">
+            <div
+              className={`flex items-center justify-center rounded-lg bg-accent-purple-dim ring-1 ring-accent-purple/20 ${
+                inline ? "h-8 w-8" : "h-7 w-7"
+              }`}
+            >
               <svg
                 viewBox="0 0 24 24"
-                className="h-3.5 w-3.5 text-accent-purple"
+                className={`${inline ? "h-4 w-4" : "h-3.5 w-3.5"} text-accent-purple`}
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={1.5}
@@ -42,7 +65,11 @@ export function LogsPanel({ logs, onClose }: Props) {
                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-sm font-semibold text-text-primary">
+            <h3
+              className={`font-semibold text-text-primary ${
+                inline ? "text-base md:text-lg" : "text-sm"
+              }`}
+            >
               Change Logs
             </h3>
             <span className="rounded-full bg-glass-bg px-2 py-0.5 text-[9px] font-semibold text-text-tertiary ring-1 ring-glass-border">
@@ -69,11 +96,17 @@ export function LogsPanel({ logs, onClose }: Props) {
 
         {/* Table */}
         <div
-          className="relative max-h-[60vh] overflow-y-auto overflow-x-hidden p-3"
+          className={`relative overflow-y-auto overflow-x-hidden ${
+            inline ? "max-h-[28rem] p-4 md:p-5" : "max-h-[60vh] p-3"
+          }`}
           style={{ scrollbarGutter: "stable" }}
         >
           {logs.length === 0 ? (
-            <div className="flex min-h-30 flex-1 items-center justify-center py-8">
+            <div
+              className={`flex flex-1 items-center justify-center ${
+                inline ? "min-h-40 py-12" : "min-h-30 py-8"
+              }`}
+            >
               <div className="flex flex-col items-center gap-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-glass-bg ring-1 ring-glass-border">
                   <svg
@@ -93,7 +126,11 @@ export function LogsPanel({ logs, onClose }: Props) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-[11px]">
+              <table
+                className={`w-full text-left ${
+                  inline ? "text-xs md:text-sm" : "text-[11px]"
+                }`}
+              >
                 <thead>
                   <tr className="border-b border-glass-border">
                     <th className="pb-2 pr-3 font-medium text-text-tertiary">
@@ -116,7 +153,7 @@ export function LogsPanel({ logs, onClose }: Props) {
                       key={log.id}
                       className="transition-colors duration-300 hover:bg-glass-bg"
                     >
-                      <td className="py-2 pr-3">
+                      <td className={`${inline ? "py-3" : "py-2"} pr-3`}>
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`inline-block h-1.5 w-1.5 rounded-full ${
@@ -130,10 +167,10 @@ export function LogsPanel({ logs, onClose }: Props) {
                           </span>
                         </div>
                       </td>
-                      <td className="py-2 pr-3 text-text-tertiary">
+                      <td className={`${inline ? "py-3" : "py-2"} pr-3 text-text-tertiary`}>
                         {formatRoom(log.room)}
                       </td>
-                      <td className="py-2 pr-3">
+                      <td className={`${inline ? "py-3" : "py-2"} pr-3`}>
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${
@@ -164,7 +201,7 @@ export function LogsPanel({ logs, onClose }: Props) {
                           </span>
                         </div>
                       </td>
-                      <td className="py-2 text-text-tertiary">
+                      <td className={`${inline ? "py-3" : "py-2"} text-text-tertiary`}>
                         {formatTime(log.timestamp)}
                       </td>
                     </tr>

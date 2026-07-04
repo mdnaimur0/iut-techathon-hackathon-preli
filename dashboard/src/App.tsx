@@ -460,7 +460,7 @@ function App() {
 
         {/* SECTION 4: Change Logs */}
         <div ref={section4Ref} className="reveal">
-          <LogsPanel logs={logs} />
+          <LogsPanel logs={logs} inline />
         </div>
       </main>
 
