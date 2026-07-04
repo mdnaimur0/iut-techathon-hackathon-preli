@@ -1,16 +1,20 @@
 import type { Device, ChangeLog, WSMessage } from "../types";
 
-type Listener = (devices: Device[], todayKwh: number) => void;
+type Listener = (devices: Device[], todayKwh: number, activeScenario: string | null) => void;
 type AlertListener = (alerts: WSMessage & { type: "alerts" }) => void;
 type ConnectListener = () => void;
+type LastUpdateListener = (timestamp: number) => void;
 
 let ws: WebSocket | null = null;
 const deviceListeners: Listener[] = [];
 const alertListeners: AlertListener[] = [];
 const connectListeners: ConnectListener[] = [];
 const disconnectListeners: ConnectListener[] = [];
+const lastUpdateListeners: LastUpdateListener[] = [];
 let latestDevices: Device[] = [];
 let latestTodayKwh: number = 0;
+let latestScenario: string | null = null;
+let lastUpdateTime: number = 0;
 
 function getWsUrl(): string {
   const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -37,7 +41,12 @@ function connect() {
         if (msg.today_kwh !== undefined) {
           latestTodayKwh = msg.today_kwh;
         }
-        deviceListeners.forEach((fn) => fn(msg.devices, latestTodayKwh));
+        if (msg.active_scenario !== undefined) {
+          latestScenario = msg.active_scenario;
+        }
+        lastUpdateTime = Date.now();
+        lastUpdateListeners.forEach((fn) => fn(lastUpdateTime));
+        deviceListeners.forEach((fn) => fn(msg.devices, latestTodayKwh, latestScenario));
       } else if (msg.type === "alerts") {
         alertListeners.forEach((fn) => fn(msg));
       }
@@ -93,6 +102,18 @@ export function subscribeDisconnect(fn: ConnectListener): () => void {
   };
 }
 
+export function subscribeLastUpdate(fn: LastUpdateListener): () => void {
+  lastUpdateListeners.push(fn);
+  return () => {
+    const idx = lastUpdateListeners.indexOf(fn);
+    if (idx >= 0) lastUpdateListeners.splice(idx, 1);
+  };
+}
+
+export function getLastUpdateTime(): number {
+  return lastUpdateTime;
+}
+
 export function getLatestDevices(): Device[] {
   return latestDevices;
 }
@@ -104,5 +125,36 @@ export async function fetchLogs(): Promise<ChangeLog[]> {
     return data.logs ?? [];
   } catch {
     return [];
+  }
+}
+
+export async function triggerScenario(name: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/scenario/${name}`, { method: "POST" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchOfficeHours(): Promise<{ open_hour: number; close_hour: number; rate_per_kwh: number } | null> {
+  try {
+    const res = await fetch("/api/office-hours");
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function updateOfficeHours(open_hour: number, close_hour: number): Promise<boolean> {
+  try {
+    const res = await fetch("/api/office-hours", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ open_hour, close_hour }),
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }

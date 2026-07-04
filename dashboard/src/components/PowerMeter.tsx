@@ -112,7 +112,7 @@ export function PowerMeter({ usage }: Props) {
         </div>
 
         {/* Stats row */}
-        <div className="relative mb-6 grid grid-cols-2 gap-3">
+        <div className="relative mb-4 grid grid-cols-3 gap-2">
           <div className="rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border card-inner-shadow">
             <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
               Capacity
@@ -133,6 +133,26 @@ export function PowerMeter({ usage }: Props) {
                 kWh
               </span>
             </p>
+          </div>
+          <div className="group relative rounded-[1.25rem] bg-glass-bg p-3 ring-1 ring-glass-border card-inner-shadow">
+            <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+              Est. Cost
+            </p>
+            <p className="mt-1 text-lg font-bold tabular-nums text-accent-amber">
+              &#x09F3;{usage.estimated_daily_cost.toFixed(1)}
+            </p>
+            {/* Tooltip */}
+            <div className="pointer-events-none absolute -top-2 left-1/2 z-50 mb-2 -translate-x-1/2 -translate-y-full opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <div className="rounded-xl bg-onyx/95 px-3 py-2 ring-1 ring-glass-border shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-xl whitespace-nowrap">
+                <p className="text-[10px] font-medium text-text-primary">
+                  {usage.today_kwh} kWh &times; &#x09F3;{usage.rate_per_kwh}/kWh
+                </p>
+                <p className="mt-0.5 text-[9px] text-text-tertiary">
+                  Rate: &#x09F3;{usage.rate_per_kwh} per kilowatt-hour
+                </p>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 h-2 w-2 bg-onyx/95 ring-1 ring-glass-border" />
+              </div>
+            </div>
           </div>
         </div>
 

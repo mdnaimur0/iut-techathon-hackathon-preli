@@ -6,14 +6,18 @@ import {
   subscribeAlerts,
   subscribeConnect,
   subscribeDisconnect,
+  subscribeLastUpdate,
+  fetchLogs,
 } from "./api/ws";
-import type { Device, Alert, Usage } from "./types";
+import type { Device, Alert, Usage, ChangeLog } from "./types";
 import { DeviceGrid } from "./components/DeviceGrid";
 import { PowerMeter } from "./components/PowerMeter";
 import { PowerChart } from "./components/PowerChart";
 import { FloorPlan } from "./components/FloorPlan";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AlertsPanel } from "./components/AlertsPanel";
+import { LogsPanel } from "./components/LogsPanel";
+import { DemoControl } from "./components/DemoControl";
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -68,12 +72,17 @@ function App() {
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [bellPulse, setBellPulse] = useState(false);
   const [todayKwh, setTodayKwh] = useState(0);
+  const [activeScenario, setActiveScenario] = useState<string | null>(null);
+  const [lastUpdateTs, setLastUpdateTs] = useState(0);
+  const [secondsAgo, setSecondsAgo] = useState(0);
+  const [logs, setLogs] = useState<ChangeLog[]>([]);
   const prevAlertCount = useRef(0);
 
   const heroRef = useInView(0.1);
   const section1Ref = useInView(0.1);
   const section2Ref = useInView(0.1);
   const section3Ref = useInView(0.1);
+  const section4Ref = useInView(0.1);
 
   const playAlertSound = useCallback(() => {
     try {
@@ -111,14 +120,15 @@ function App() {
   useEffect(() => {
     startWS();
 
-    const unsubDevices = subscribeDevices((devs, kwh) => {
+    const unsubDevices = subscribeDevices((devs, kwh, scenario) => {
       setDevices(devs);
       setTodayKwh(kwh);
+      setActiveScenario(scenario);
     });
 
     const unsubAlerts = subscribeAlerts((msg) => {
       setAlerts((prev) => {
-        const next = [...msg.alerts, ...prev].slice(0, 50);
+        const next = [...msg.alerts, ...prev];
         return next;
       });
     });
@@ -131,12 +141,38 @@ function App() {
       setConnected(false);
     });
 
+    const unsubLastUpdate = subscribeLastUpdate((ts) => {
+      setLastUpdateTs(ts);
+    });
+
     return () => {
       unsubDevices();
       unsubAlerts();
       unsubConnect();
       unsubDisconnect();
+      unsubLastUpdate();
     };
+  }, []);
+
+  // Tick "seconds ago" every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (lastUpdateTs > 0) {
+        setSecondsAgo(Math.floor((Date.now() - lastUpdateTs) / 1000));
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lastUpdateTs]);
+
+  // Fetch logs on mount and periodically
+  useEffect(() => {
+    const loadLogs = async () => {
+      const data = await fetchLogs();
+      setLogs(data);
+    };
+    loadLogs();
+    const interval = setInterval(loadLogs, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -179,9 +215,17 @@ function App() {
     total_watts_now: totalWatts,
     per_room_watts: perRoomWatts,
     today_kwh: todayKwh,
+    estimated_daily_cost: todayKwh * 8.0,
+    rate_per_kwh: 8.0,
   };
 
   const onCount = devices.filter((d) => d.status === "on").length;
+
+  const formatSecondsAgo = (s: number): string => {
+    if (s < 5) return "just now";
+    if (s < 60) return `${s}s ago`;
+    return `${Math.floor(s / 60)}m ${s % 60}s ago`;
+  };
 
   return (
     <div className="relative min-h-dvh bg-void text-text-primary">
@@ -235,6 +279,16 @@ function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Last updated indicator */}
+            {lastUpdateTs > 0 && (
+              <div className="hidden items-center gap-1.5 rounded-full bg-glass-bg px-2.5 py-1 ring-1 ring-glass-border lg:flex">
+                <span className="h-1 w-1 rounded-full bg-accent-emerald animate-pulse" />
+                <span className="text-[9px] font-medium tabular-nums text-text-tertiary">
+                  {formatSecondsAgo(secondsAgo)}
+                </span>
+              </div>
+            )}
+
             <ThemeToggle />
 
             <div className="hidden items-center gap-2 rounded-full bg-glass-bg px-3 py-1.5 ring-1 ring-glass-border sm:flex">
@@ -384,12 +438,12 @@ function App() {
         {/* SECTION 1: Power Meter + Power Chart */}
         <div
           ref={section1Ref}
-          className="reveal mb-6 grid grid-cols-1 gap-5 md:grid-cols-3"
+          className="reveal mb-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
         >
           <div className="md:col-span-1">
             <PowerMeter usage={usage} />
           </div>
-          <div className="md:col-span-2">
+          <div className="md:col-span-1 lg:col-span-2">
             <PowerChart currentWatts={totalWatts} />
           </div>
         </div>
@@ -400,10 +454,18 @@ function App() {
         </div>
 
         {/* SECTION 3: Floor Plan */}
-        <div ref={section3Ref} className="reveal">
+        <div ref={section3Ref} className="reveal mb-6">
           <FloorPlan devices={devices} />
         </div>
+
+        {/* SECTION 4: Change Logs */}
+        <div ref={section4Ref} className="reveal">
+          <LogsPanel logs={logs} />
+        </div>
       </main>
+
+      {/* Demo Control FAB */}
+      <DemoControl activeScenario={activeScenario} />
     </div>
   );
 }

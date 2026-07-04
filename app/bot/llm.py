@@ -34,7 +34,7 @@ async def humanize(command: str, data: dict | list) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a friendly office assistant bot. Reply in a casual, helpful and engaging tone. Keep responses very concise and reply in just a single sentence. Do not use markdown formatting.",
+                    "content": "You are a friendly office assistant bot. Reply in a casual, helpful and engaging tone. Keep responses very concise \u2014 one or two sentences max. Do not use markdown formatting.",
                 },
                 {"role": "user", "content": prompt},
             ],
@@ -46,13 +46,18 @@ async def humanize(command: str, data: dict | list) -> str:
         return _template_fallback(command, data)
 
 
+async def humanize_embed(command: str, data: dict | list) -> str:
+    """Generate a short description for use inside a Discord embed."""
+    return await humanize(command, data)
+
+
 def _build_prompt(command: str, data: dict | list) -> str:
     if command == "status":
         return f"Here's the current device status across all rooms: {data}. Summarize this in a friendly way, mentioning which rooms have devices on. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
     elif command == "room":
         return f"Here's the detailed status for a room: {data}. Describe the room's current state in a conversational way. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
     elif command == "usage":
-        return f"Here's the current power usage: {data}. Explain this in a friendly way, mentioning total watts and today's kWh. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
+        return f"Here's the current power usage: {data}. Explain this in a friendly way, mentioning total watts, today's kWh, and estimated cost. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
     return f"Here's the data: {data}. Summarize this briefly. Write work1, work2 in full as Work Room 1, Work Room 2. Use casual language."
 
 
@@ -110,6 +115,8 @@ def _template_fallback(command: str, data: dict | list) -> str:
     elif command == "usage":
         total = data.get("total_watts_now", 0)
         per_room = data.get("per_room_watts", {})
+        kwh = data.get("today_kwh", 0.0)
+        cost = data.get("estimated_daily_cost", 0.0)
         room_names = {
             "drawing": "Drawing Room",
             "work1": "Work Room 1",
@@ -118,6 +125,9 @@ def _template_fallback(command: str, data: dict | list) -> str:
         parts = [f"Total power right now: {total}W"]
         for room, watts in per_room.items():
             parts.append(f"{room_names.get(room, room)}: {watts}W")
+        parts.append(f"Today: {kwh} kWh")
+        if cost > 0:
+            parts.append(f"Estimated cost: \u09f3{cost:.2f}")
         return ". ".join(parts) + "."
 
     return str(data)

@@ -1,4 +1,4 @@
-"""In-memory store — single source of truth for all 18 devices."""
+"""In-memory store — single source of truth for all 15 devices."""
 
 import os
 from datetime import datetime, timezone
@@ -19,6 +19,27 @@ OFFICE_CLOSE_HOUR = int(os.getenv("OFFICE_CLOSE_HOUR", "17"))
 ELECTRICITY_RATE_PER_KWH = float(os.getenv("ELECTRICITY_RATE_PER_KWH", "8.0"))
 
 _devices: dict[str, Device] = {}
+
+
+def get_office_hours() -> dict:
+    """Return current office hours configuration."""
+    return {
+        "open_hour": OFFICE_OPEN_HOUR,
+        "close_hour": OFFICE_CLOSE_HOUR,
+        "rate_per_kwh": ELECTRICITY_RATE_PER_KWH,
+    }
+
+
+def set_office_hours(open_hour: int, close_hour: int) -> bool:
+    """Update office hours at runtime. Returns True if valid."""
+    global OFFICE_OPEN_HOUR, OFFICE_CLOSE_HOUR
+    if not (0 <= open_hour <= 23 and 0 <= close_hour <= 23):
+        return False
+    if open_hour >= close_hour:
+        return False
+    OFFICE_OPEN_HOUR = open_hour
+    OFFICE_CLOSE_HOUR = close_hour
+    return True
 
 
 def _now_iso() -> str:

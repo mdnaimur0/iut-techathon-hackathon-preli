@@ -34,3 +34,5 @@ class Usage(BaseModel):
     total_watts_now: int
     per_room_watts: dict[str, int]
     today_kwh: float
+    estimated_daily_cost: float = 0.0
+    rate_per_kwh: float = 0.0

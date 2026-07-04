@@ -23,8 +23,8 @@ async def lifespan(app: FastAPI):
     try:
         from .bot import start_bot
         bot_task = asyncio.create_task(start_bot())
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[Bot] Failed to start: {e}")
     yield
     sim_task.cancel()
     if bot_task:
@@ -47,9 +47,15 @@ async def ws_endpoint(ws: WebSocket):
     # Send current state immediately so the client gets instant data + can
     # derive connection status from the first received message.
     from .db import get_today_kwh
+    from .simulator import get_scenario
     state = services.get_state()
     today_kwh = await get_today_kwh()
-    await ws.send_json({"type": "state", "devices": state, "today_kwh": today_kwh})
+    await ws.send_json({
+        "type": "state",
+        "devices": state,
+        "today_kwh": today_kwh,
+        "active_scenario": get_scenario(),
+    })
     try:
         while True:
             await ws.receive_text()

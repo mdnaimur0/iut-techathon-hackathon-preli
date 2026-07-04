@@ -5,6 +5,8 @@
  * measures current draw with an ACS712 sensor, and outputs a JSON payload
  * matching the software simulator's device shape.
  *
+ * Alert: Buzzer activates when all devices are ON (overload warning).
+ *
  * Hardware:
  *   - ESP32 DevKit V1
  *   - 3x LEDs (lights) with 220Ω resistors on GPIO 25, 26, 27
@@ -59,6 +61,8 @@ const int DEVICE_WATTS[] = {
 bool deviceStates[NUM_DEVICES] = {false};
 unsigned long lastChanged[NUM_DEVICES] = {0};
 float currentDraw = 0.0;
+bool buzzerActive = false;
+unsigned long buzzerStartTime = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -111,7 +115,37 @@ float readCurrent() {
   return abs(current);
 }
 
+bool checkAlertCondition() {
+  // Alert: all devices are ON — potential overload
+  for (int i = 0; i < NUM_DEVICES; i++) {
+    if (!deviceStates[i]) return false;
+  }
+  return true;
+}
+
+void handleBuzzer() {
+  bool allOn = checkAlertCondition();
+
+  if (allOn && !buzzerActive) {
+    // Activate buzzer for 2 seconds
+    digitalWrite(BUZZER_PIN, HIGH);
+    buzzerActive = true;
+    buzzerStartTime = millis();
+  }
+
+  if (buzzerActive && (millis() - buzzerStartTime >= 2000)) {
+    digitalWrite(BUZZER_PIN, LOW);
+    buzzerActive = false;
+  }
+}
+
 void outputJSON() {
+  bool allOn = checkAlertCondition();
+  int totalWatts = 0;
+  for (int i = 0; i < NUM_DEVICES; i++) {
+    if (deviceStates[i]) totalWatts += DEVICE_WATTS[i];
+  }
+
   Serial.print("{");
   Serial.print("\"room\":\"work1\",");
   Serial.print("\"devices\":[");
@@ -128,6 +162,9 @@ void outputJSON() {
   }
   Serial.print("],");
   Serial.print("\"current_amps\":"); Serial.print(currentDraw, 3);
+  Serial.print(",\"total_watts\":"); Serial.print(totalWatts);
+  Serial.print(",\"alert\":"); Serial.print(allOn ? "true" : "false");
+  Serial.print(",\"buzzer_active\":"); Serial.print(buzzerActive ? "true" : "false");
   Serial.print(",\"timestamp\":"); Serial.print(millis());
   Serial.println("}");
 }
@@ -135,6 +172,7 @@ void outputJSON() {
 void loop() {
   readSwitches();
   currentDraw = readCurrent();
+  handleBuzzer();
   outputJSON();
   delay(5000);
 }

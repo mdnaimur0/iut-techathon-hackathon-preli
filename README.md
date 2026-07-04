@@ -18,25 +18,38 @@ Devices → FastAPI (simulator + store + API + WS + bot) → Dashboard + Discord
 
 ### Web Dashboard
 - **Live Device Status Grid** — 15 devices grouped by room with real-time on/off indicators
-- **Power Consumption Meter** — total office watts + per-room breakdown + daily kWh
+- **Power Consumption Meter** — total office watts + per-room breakdown + daily kWh + estimated cost (BDT)
 - **Interactive Floor Plan** — SVG top-view with animated fans (spin) and glowing lights
 - **Power Trend Chart** — real-time line chart of power consumption over time
 - **Active Alerts Panel** — timestamped after-hours and room-on-2h warnings
+- **Change Logs** — full device state change history with timestamps
+- **Demo Scenario Control** — trigger preset states (all-on, energy-saver, lunch-break, after-hours-forgotten) for live demos
+- **Last Updated Indicator** — proves real-time data flow ("Updated 3s ago")
+- **Dark/Light Theme** — toggleable with localStorage persistence
 
 ### Discord Bot
 | Command | Description |
 |:--------|:------------|
 | `!status` | Overview of all devices across all rooms |
 | `!room <name>` | Detailed breakdown of a specific room |
-| `!usage` | Real-time power consumption and daily estimates |
+| `!usage` | Real-time power consumption, daily kWh, and estimated cost |
+| `!alerts` | Show currently active alerts |
+| `!help` | List all available commands |
 
-- Humanized, conversational replies via Groq LLM (with fallback if no API key)
+- Rich embed responses with color-coded severity and room fields
+- Humanized, conversational summaries via Groq LLM (with fallback if no API key)
 - Proactive alert posting to a designated Discord channel
 
 ### Hardware Schematic
 - Wokwi-compatible ESP32 circuit modeling one room
 - 3 LEDs (lights), 2 servos (fans), 5 slide switches, ACS712 current sensor
+- Buzzer activates on alert conditions (all devices ON = overload warning)
 - Firmware outputs JSON matching the software simulator's device shape
+
+### Simulation
+Devices toggle randomly with correlated room behavior: when one device turns ON, nearby devices in the same room have a boosted chance of turning ON too. Office hours (configurable from the dashboard or env) are only used by the alert engine to detect after-hours violations — the simulator itself does not depend on real time.
+
+Demo scenarios can force specific states for live presentations: `all-on`, `energy-saver`, `lunch-break`, `after-hours-forgotten`.
 
 ## Tech Stack
 
@@ -45,15 +58,15 @@ Devices → FastAPI (simulator + store + API + WS + bot) → Dashboard + Discord
 | Backend | Python + FastAPI + uvicorn |
 | Real-time | Native WebSockets |
 | State | In-memory dict (Pydantic models) |
-| Persistence | SQLite (cumulative kWh) |
+| Persistence | SQLite (cumulative kWh + change logs) |
 | Frontend | React + Vite + TypeScript |
 | Styling | TailwindCSS v4 |
-| Animations | Framer Motion + CSS |
+| Animations | Framer Motion + CSS + SVG SMIL |
 | Charts | Recharts |
 | Bot | discord.py (in-process) |
-| LLM | Groq (Llama 3.x) with templated fallback |
+| LLM | Groq (Llama 3.3-70b) with templated fallback |
 | Circuit | Wokwi (ESP32) |
-| Diagram | SVG |
+| Diagram | Hand-crafted SVG |
 
 ## Setup
 
@@ -89,7 +102,7 @@ Edit `.env` with your settings:
 
 ```env
 # Backend / simulation
-ELECTRICITY_RATE_PER_KWH=8.0     # currency per kWh
+ELECTRICITY_RATE_PER_KWH=8.0     # BDT per kWh
 OFFICE_OPEN_HOUR=9
 OFFICE_CLOSE_HOUR=17
 
@@ -133,31 +146,48 @@ techathon-hackathon-preli/
 │   ├── main.py              # app entry point, lifespan, routes
 │   ├── store.py             # in-memory source of truth (15 devices)
 │   ├── services.py          # shared read logic (API + bot)
-│   ├── simulator.py         # asyncio state mutation loop
+│   ├── simulator.py         # random device state mutation loop
 │   ├── alerts.py            # after-hours / room-on-2h engine
 │   ├── ws.py                # WebSocket connection manager
-│   ├── routes.py            # REST API endpoints
-│   ├── db.py                # SQLite cumulative kWh
+│   ├── routes.py            # REST API + scenario endpoints
+│   ├── db.py                # SQLite cumulative kWh + change logs
 │   ├── models.py            # Pydantic models (Device, Alert, Usage)
 │   └── bot/
-│       ├── __init__.py      # discord.py bot, commands, start/stop
+│       ├── __init__.py      # discord.py bot, embeds, commands
 │       └── llm.py           # Groq client + templated fallback
 ├── dashboard/               # React + Vite + TypeScript frontend
+│   ├── public/favicon.svg   # SVG bolt icon
 │   ├── src/
-│   │   ├── api/ws.ts        # reconnecting WebSocket client
-│   │   ├── components/      # DeviceGrid, PowerMeter, AlertsPanel, FloorPlan, PowerChart
+│   │   ├── api/ws.ts        # reconnecting WebSocket + scenario trigger
+│   │   ├── components/      # DeviceGrid, PowerMeter, PowerChart, FloorPlan,
+│   │   │                    # AlertsPanel, LogsPanel, DemoControl, ThemeToggle
 │   │   ├── types.ts         # TypeScript types mirroring backend models
 │   │   └── App.tsx          # main dashboard layout
 │   ├── index.html
 │   └── vite.config.ts       # dev proxy to FastAPI
 ├── hardware/
 │   ├── diagram.json         # Wokwi ESP32 circuit
-│   ├── sketch.ino           # ESP32 firmware
+│   ├── sketch.ino           # ESP32 firmware (with buzzer alert)
 │   └── README.md            # wiring explanation
 ├── docs/
-│   └── system-diagram.svg   # architecture diagram
+│   ├── system-diagram.svg   # architecture diagram (with hardware + LLM)
+│   └── screenshots/         # dashboard screenshots
+├── others/
+│   └── office-layout-top-view.png
 └── README.md
 ```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|:-------|:---------|:------------|
+| GET | `/api/state` | Current state of all 15 devices |
+| GET | `/api/rooms/{id}` | Detailed status of a specific room |
+| GET | `/api/usage` | Power consumption + daily kWh + estimated cost |
+| GET | `/api/alerts` | Active alerts |
+| GET | `/api/logs` | Recent device state change logs |
+| POST | `/api/scenario/{name}` | Trigger a demo scenario (`all-on`, `energy-saver`, `lunch-break`, `after-hours-forgotten`, `normal`) |
+| WS | `/ws` | Real-time state + alerts broadcast |
 
 ## Data Model
 

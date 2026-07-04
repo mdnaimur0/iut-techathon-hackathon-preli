@@ -86,6 +86,15 @@ def get_active_alerts() -> list[Alert]:
     return list(_active_alerts)
 
 
+def recheck_alerts(devices: list[dict]) -> list[Alert]:
+    """Re-evaluate alert conditions with current device state.
+
+    Called when office hours change, scenarios activate, etc.
+    Same logic as check_alerts but intended for external triggers.
+    """
+    return check_alerts(devices)
+
+
 def _is_duplicate(new_alert: Alert) -> bool:
     for existing in _active_alerts:
         if existing.message == new_alert.message and existing.room == new_alert.room:

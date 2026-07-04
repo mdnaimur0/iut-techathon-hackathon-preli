@@ -1,140 +1,168 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" font-family="system-ui, sans-serif">
   <!-- Background -->
-  <rect width="1000" height="600" fill="#09090b" rx="12"/>
+  <rect width="1100" height="620" fill="#09090b" rx="12"/>
 
   <!-- Title -->
-  <text x="500" y="40" text-anchor="middle" font-size="20" font-weight="700" fill="#f4f4f5">Office Energy Monitor — System Architecture</text>
-  <text x="500" y="60" text-anchor="middle" font-size="12" fill="#71717a">Single FastAPI process — One source of truth</text>
+  <text x="550" y="40" text-anchor="middle" font-size="20" font-weight="700" fill="#f4f4f5">Office Energy Monitor — System Architecture</text>
+  <text x="550" y="60" text-anchor="middle" font-size="12" fill="#71717a">Single FastAPI process — One source of truth</text>
 
-  <!-- SIMULATED DEVICES (left) -->
-  <rect x="30" y="100" width="160" height="200" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
-  <text x="110" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#a1a1aa">Simulated Devices</text>
-  <text x="110" y="148" text-anchor="middle" font-size="11" fill="#71717a">15 devices</text>
-  <text x="110" y="168" text-anchor="middle" font-size="11" fill="#71717a">3 rooms × 5 each</text>
+  <!-- ESP32 HARDWARE (far left) -->
+  <rect x="20" y="100" width="140" height="180" rx="10" fill="#18181b" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="90" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#fbbf24">ESP32 Hardware</text>
+  <text x="90" y="145" text-anchor="middle" font-size="10" fill="#71717a">(Physical Path)</text>
+  <text x="90" y="170" text-anchor="middle" font-size="10" fill="#71717a">3x LEDs (lights)</text>
+  <text x="90" y="186" text-anchor="middle" font-size="10" fill="#71717a">2x Servos (fans)</text>
+  <text x="90" y="202" text-anchor="middle" font-size="10" fill="#71717a">5x Slide switches</text>
+  <text x="90" y="218" text-anchor="middle" font-size="10" fill="#71717a">ACS712 current sensor</text>
+  <text x="90" y="234" text-anchor="middle" font-size="10" fill="#71717a">Buzzer (alert output)</text>
+  <text x="90" y="258" text-anchor="middle" font-size="9" fill="#a1a1aa">sketch.ino + diagram.json</text>
+  <text x="90" y="272" text-anchor="middle" font-size="9" fill="#a1a1aa">Wokwi simulation</text>
+
+  <!-- Arrow: ESP32 → Simulated Devices -->
+  <line x1="165" y1="190" x2="200" y2="190" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arrow-amber)"/>
+
+  <!-- SIMULATED DEVICES -->
+  <rect x="205" y="100" width="140" height="180" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+  <text x="275" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#a1a1aa">Simulated Devices</text>
+  <text x="275" y="148" text-anchor="middle" font-size="11" fill="#71717a">15 devices</text>
+  <text x="275" y="168" text-anchor="middle" font-size="11" fill="#71717a">3 rooms × 5 each</text>
 
   <!-- Device icons -->
-  <g transform="translate(50, 180)">
+  <g transform="translate(225, 180)">
     <rect width="45" height="30" rx="4" fill="#27272a" stroke="#3f3f46"/>
-    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#facc15">💡×3</text>
+    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#facc15">×3</text>
     <text x="22" y="40" text-anchor="middle" font-size="8" fill="#52525b">Lights</text>
   </g>
-  <g transform="translate(110, 180)">
+  <g transform="translate(285, 180)">
     <rect width="45" height="30" rx="4" fill="#27272a" stroke="#3f3f46"/>
-    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#34d399">🌀×2</text>
+    <text x="22" y="20" text-anchor="middle" font-size="9" fill="#34d399">×2</text>
     <text x="22" y="40" text-anchor="middle" font-size="8" fill="#52525b">Fans</text>
   </g>
 
-  <text x="110" y="250" text-anchor="middle" font-size="10" fill="#52525b">Drawing Room</text>
-  <text x="110" y="265" text-anchor="middle" font-size="10" fill="#52525b">Work Room 1</text>
-  <text x="110" y="280" text-anchor="middle" font-size="10" fill="#52525b">Work Room 2</text>
+  <text x="275" y="250" text-anchor="middle" font-size="10" fill="#52525b">Drawing Room</text>
+  <text x="275" y="265" text-anchor="middle" font-size="10" fill="#52525b">Work Room 1</text>
+  <text x="275" y="280" text-anchor="middle" font-size="10" fill="#52525b">Work Room 2</text>
 
   <!-- Arrow: Devices → FastAPI -->
-  <line x1="195" y1="200" x2="260" y2="200" stroke="#3f3f46" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="350" y1="190" x2="410" y2="190" stroke="#3f3f46" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <!-- FASTAPI BOX (center) -->
-  <rect x="265" y="85" width="420" height="280" rx="10" fill="#18181b" stroke="#3b82f6" stroke-width="2"/>
-  <text x="475" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#60a5fa">FastAPI (Single Process)</text>
+  <rect x="415" y="80" width="380" height="300" rx="10" fill="#18181b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="605" y="105" text-anchor="middle" font-size="15" font-weight="700" fill="#60a5fa">FastAPI (Single Process)</text>
 
   <!-- Internal components -->
   <!-- Simulator -->
-  <rect x="285" y="130" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="345" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Simulator</text>
-  <text x="345" y="168" text-anchor="middle" font-size="9" fill="#64748b">asyncio task</text>
+  <rect x="435" y="120" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="495" y="142" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Simulator</text>
+  <text x="495" y="158" text-anchor="middle" font-size="9" fill="#64748b">random toggles + scenarios</text>
 
   <!-- Store -->
-  <rect x="420" y="130" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="480" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">In-Memory Store</text>
-  <text x="480" y="168" text-anchor="middle" font-size="9" fill="#64748b">SOURCE OF TRUTH</text>
+  <rect x="570" y="120" width="120" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="630" y="142" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">In-Memory Store</text>
+  <text x="630" y="158" text-anchor="middle" font-size="9" fill="#64748b">SOURCE OF TRUTH</text>
 
   <!-- Arrow: Simulator → Store -->
-  <line x1="405" y1="155" x2="420" y2="155" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
+  <line x1="555" y1="145" x2="570" y2="145" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
 
   <!-- Services -->
-  <rect x="285" y="200" width="255" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="412" y="225" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">services.py — get_state / get_room / get_usage / get_alerts</text>
+  <rect x="435" y="190" width="255" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="562" y="215" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">services.py — get_state / get_room / get_usage / get_alerts</text>
 
   <!-- Arrow: Store → Services -->
-  <line x1="480" y1="180" x2="480" y2="200" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
+  <line x1="630" y1="170" x2="630" y2="190" stroke="#334155" stroke-width="1" marker-end="url(#arrow-sm)"/>
 
   <!-- Alert Engine -->
-  <rect x="285" y="255" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="345" y="278" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Alert Engine</text>
-  <text x="345" y="292" text-anchor="middle" font-size="9" fill="#64748b">after-hours / 2h rule</text>
+  <rect x="435" y="245" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="495" y="268" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Alert Engine</text>
+  <text x="495" y="282" text-anchor="middle" font-size="9" fill="#64748b">after-hours / 2h rule</text>
 
   <!-- DB -->
-  <rect x="420" y="255" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="480" y="278" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">SQLite (kWh)</text>
+  <rect x="570" y="245" width="120" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="630" y="265" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">SQLite</text>
+  <text x="630" y="279" text-anchor="middle" font-size="9" fill="#64748b">kWh / logs / config</text>
 
   <!-- API -->
-  <rect x="560" y="130" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="615" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">REST API</text>
-  <text x="615" y="168" text-anchor="middle" font-size="9" fill="#64748b">/api/*</text>
+  <rect x="710" y="120" width="75" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="747" y="142" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">REST</text>
+  <text x="747" y="158" text-anchor="middle" font-size="9" fill="#64748b">/api/*</text>
 
   <!-- WebSocket -->
-  <rect x="560" y="200" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="615" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">WebSocket</text>
-  <text x="615" y="238" text-anchor="middle" font-size="9" fill="#64748b">/ws (broadcast)</text>
+  <rect x="710" y="190" width="75" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="747" y="212" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">WS</text>
+  <text x="747" y="228" text-anchor="middle" font-size="9" fill="#64748b">/ws push</text>
 
   <!-- Bot -->
-  <rect x="560" y="265" width="110" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="615" y="287" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Discord Bot</text>
-  <text x="615" y="303" text-anchor="middle" font-size="9" fill="#64748b">discord.py task</text>
+  <rect x="710" y="260" width="75" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="747" y="282" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">Bot</text>
+  <text x="747" y="298" text-anchor="middle" font-size="9" fill="#64748b">discord.py</text>
 
   <!-- Frontend serving -->
-  <rect x="285" y="310" width="385" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
-  <text x="477" y="335" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">app.frontend("/", directory="dashboard/dist")</text>
+  <rect x="435" y="310" width="350" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="610" y="335" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">app.frontend("/", directory="dashboard/dist")</text>
+
+  <!-- Groq LLM (below bot) -->
+  <rect x="870" y="260" width="120" height="50" rx="10" fill="#18181b" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="930" y="282" text-anchor="middle" font-size="11" font-weight="600" fill="#c084fc">Groq LLM</text>
+  <text x="930" y="298" text-anchor="middle" font-size="9" fill="#71717a">Llama 3.3-70b</text>
+  <text x="930" y="310" text-anchor="middle" font-size="9" fill="#52525b">humanizes responses</text>
+
+  <!-- Arrow: Bot ↔ Groq -->
+  <line x1="785" y1="285" x2="870" y2="285" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arrow-purple)"/>
 
   <!-- ARROWS OUT (right side) -->
   <!-- API → Dashboard -->
-  <line x1="680" y1="155" x2="770" y2="145" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="785" y1="145" x2="870" y2="135" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
   <!-- WS → Dashboard -->
-  <line x1="680" y1="225" x2="770" y2="215" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="785" y1="215" x2="870" y2="205" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-green)"/>
   <!-- Bot → Discord -->
-  <line x1="680" y1="290" x2="770" y2="310" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <line x1="785" y1="285" x2="870" y2="350" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
 
   <!-- DASHBOARD (right top) -->
-  <rect x="775" y="100" width="195" height="170" rx="10" fill="#18181b" stroke="#22c55e" stroke-width="1.5"/>
-  <text x="872" y="125" text-anchor="middle" font-size="13" font-weight="600" fill="#4ade80">Web Dashboard</text>
-  <text x="872" y="148" text-anchor="middle" font-size="10" fill="#71717a">React + Vite + TS</text>
-  <text x="872" y="168" text-anchor="middle" font-size="10" fill="#71717a">TailwindCSS + Recharts</text>
-  <text x="872" y="190" text-anchor="middle" font-size="10" fill="#71717a">• Device Status Grid</text>
-  <text x="872" y="206" text-anchor="middle" font-size="10" fill="#71717a">• Power Consumption Meter</text>
-  <text x="872" y="222" text-anchor="middle" font-size="10" fill="#71717a">• Interactive Floor Plan</text>
-  <text x="872" y="238" text-anchor="middle" font-size="10" fill="#71717a">• Alerts Panel</text>
-  <text x="872" y="254" text-anchor="middle" font-size="10" fill="#71717a">• Power Trend Chart</text>
+  <rect x="875" y="90" width="195" height="175" rx="10" fill="#18181b" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="972" y="115" text-anchor="middle" font-size="13" font-weight="600" fill="#4ade80">Web Dashboard</text>
+  <text x="972" y="138" text-anchor="middle" font-size="10" fill="#71717a">React + Vite + TS</text>
+  <text x="972" y="155" text-anchor="middle" font-size="10" fill="#71717a">TailwindCSS + Recharts</text>
+  <text x="972" y="178" text-anchor="middle" font-size="10" fill="#71717a">• Device Status Grid</text>
+  <text x="972" y="194" text-anchor="middle" font-size="10" fill="#71717a">• Power Meter + Cost</text>
+  <text x="972" y="210" text-anchor="middle" font-size="10" fill="#71717a">• Interactive Floor Plan</text>
+  <text x="972" y="226" text-anchor="middle" font-size="10" fill="#71717a">• Alerts + Change Logs</text>
+  <text x="972" y="242" text-anchor="middle" font-size="10" fill="#71717a">• Demo Scenario Control</text>
 
   <!-- DISCORD (right bottom) -->
-  <rect x="775" y="290" width="195" height="100" rx="10" fill="#18181b" stroke="#a855f7" stroke-width="1.5"/>
-  <text x="872" y="315" text-anchor="middle" font-size="13" font-weight="600" fill="#c084fc">Discord Bot</text>
-  <text x="872" y="338" text-anchor="middle" font-size="10" fill="#71717a">!status — all rooms overview</text>
-  <text x="872" y="354" text-anchor="middle" font-size="10" fill="#71717a">!room &lt;name&gt; — room detail</text>
-  <text x="872" y="370" text-anchor="middle" font-size="10" fill="#71717a">!usage — power metrics</text>
+  <rect x="875" y="320" width="195" height="110" rx="10" fill="#18181b" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="972" y="345" text-anchor="middle" font-size="13" font-weight="600" fill="#c084fc">Discord Bot</text>
+  <text x="972" y="368" text-anchor="middle" font-size="10" fill="#71717a">!status — all rooms overview</text>
+  <text x="972" y="384" text-anchor="middle" font-size="10" fill="#71717a">!room &lt;name&gt; — room detail</text>
+  <text x="972" y="400" text-anchor="middle" font-size="10" fill="#71717a">!usage — power + cost metrics</text>
+  <text x="972" y="416" text-anchor="middle" font-size="10" fill="#71717a">!alerts / !help — alerts &amp; commands</text>
 
   <!-- USER -->
-  <rect x="820" y="430" width="110" height="50" rx="10" fill="#27272a" stroke="#52525b" stroke-width="1.5"/>
-  <text x="875" y="458" text-anchor="middle" font-size="13" font-weight="600" fill="#d4d4d8">User</text>
-  <text x="875" y="475" text-anchor="middle" font-size="10" fill="#71717a">Boss / Team</text>
+  <rect x="920" y="470" width="110" height="50" rx="10" fill="#27272a" stroke="#52525b" stroke-width="1.5"/>
+  <text x="975" y="498" text-anchor="middle" font-size="13" font-weight="600" fill="#d4d4d8">User</text>
+  <text x="975" y="515" text-anchor="middle" font-size="10" fill="#71717a">Boss / Team</text>
 
   <!-- Dashboard → User -->
-  <line x1="872" y1="270" x2="872" y2="430" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 2"/>
+  <line x1="972" y1="265" x2="972" y2="470" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 2"/>
   <!-- Discord → User -->
-  <line x1="872" y1="390" x2="872" y2="430" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 2"/>
+  <line x1="972" y1="430" x2="972" y2="470" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 2"/>
 
   <!-- Single process callout -->
-  <rect x="265" y="370" width="420" height="30" rx="6" fill="#1e3a5f" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4 2"/>
-  <text x="475" y="390" text-anchor="middle" font-size="10" font-weight="500" fill="#60a5fa">Single uvicorn process — one command: uvicorn app.main:app</text>
+  <rect x="415" y="370" width="380" height="30" rx="6" fill="#1e3a5f" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="605" y="390" text-anchor="middle" font-size="10" font-weight="500" fill="#60a5fa">Single uvicorn process — one command: uvicorn app.main:app</text>
 
   <!-- Legend -->
-  <rect x="30" y="430" width="200" height="120" rx="8" fill="#18181b" stroke="#27272a"/>
-  <text x="130" y="452" text-anchor="middle" font-size="11" font-weight="600" fill="#a1a1aa">Legend</text>
-  <line x1="50" y1="468" x2="80" y2="468" stroke="#22c55e" stroke-width="1.5"/>
-  <text x="90" y="472" font-size="10" fill="#71717a">HTTP + WebSocket</text>
-  <line x1="50" y1="490" x2="80" y2="490" stroke="#a855f7" stroke-width="1.5"/>
-  <text x="90" y="494" font-size="10" fill="#71717a">Discord API</text>
-  <line x1="50" y1="512" x2="80" y2="512" stroke="#334155" stroke-width="1.5"/>
-  <text x="90" y="516" font-size="10" fill="#71717a">Internal data flow</text>
-  <line x1="50" y1="534" x2="80" y2="534" stroke="#334155" stroke-width="1" stroke-dasharray="4 2"/>
-  <text x="90" y="538" font-size="10" fill="#71717a">Served frontend</text>
+  <rect x="20" y="440" width="220" height="140" rx="8" fill="#18181b" stroke="#27272a"/>
+  <text x="130" y="462" text-anchor="middle" font-size="11" font-weight="600" fill="#a1a1aa">Legend</text>
+  <line x1="40" y1="478" x2="70" y2="478" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="80" y="482" font-size="10" fill="#71717a">HTTP + WebSocket</text>
+  <line x1="40" y1="500" x2="70" y2="500" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="80" y="504" font-size="10" fill="#71717a">Discord API + LLM</text>
+  <line x1="40" y1="522" x2="70" y2="522" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="80" y="526" font-size="10" fill="#71717a">Hardware path (ESP32)</text>
+  <line x1="40" y1="544" x2="70" y2="544" stroke="#334155" stroke-width="1.5"/>
+  <text x="80" y="548" font-size="10" fill="#71717a">Internal data flow</text>
+  <line x1="40" y1="566" x2="70" y2="566" stroke="#334155" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="80" y="570" font-size="10" fill="#71717a">Served frontend</text>
 
   <!-- Arrow markers -->
   <defs>
@@ -149,6 +177,9 @@
     </marker>
     <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
     </marker>
   </defs>
 </svg>

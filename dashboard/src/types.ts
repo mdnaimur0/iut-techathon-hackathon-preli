@@ -23,6 +23,8 @@ export interface Usage {
   total_watts_now: number;
   per_room_watts: Record<string, number>;
   today_kwh: number;
+  estimated_daily_cost: number;
+  rate_per_kwh: number;
 }
 
 export interface ChangeLog {
@@ -40,6 +42,7 @@ export interface StateMessage {
   type: "state";
   devices: Device[];
   today_kwh?: number;
+  active_scenario?: string | null;
 }
 
 export interface AlertsMessage {
