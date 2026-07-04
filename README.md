@@ -11,7 +11,7 @@ A real-time office energy monitoring system with a live web dashboard and Discor
 | Live Dashboard                 | **https://loadwatch.mdnaimurrahman.com**                                                                                            |
 | Add Discord Bot to your server | **[Invite Bot](https://discord.com/oauth2/authorize?client_id=1522635268811788308&permissions=67584&integration_type=0&scope=bot)** |
 
-No setup required. The dashboard is live and the bot is already running. Just open the dashboard URL or click the invite link to add the bot to any Discord server you control, then try commands like `!status`, `!room drawing`, `!usage`, and `!alerts`.
+No setup required. The dashboard is live and the bot is already running. Just open the dashboard URL or click the invite link to add the bot to any Discord server you control, then try commands like `!status`, `!room drawing`, and `!usage`.
 
 ## Architecture
 
@@ -70,7 +70,6 @@ Devices → FastAPI (simulator + store + API + WS + bot) → Dashboard + Discord
 | `!status`      | Overview of all devices across all rooms                   |
 | `!room <name>` | Detailed breakdown of a specific room                      |
 | `!usage`       | Real-time power consumption, daily kWh, and estimated cost |
-| `!alerts`      | Show currently active alerts                               |
 | `!help`        | List all available commands                                |
 
 - Rich embed responses with color-coded severity and room fields

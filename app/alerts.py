@@ -1,6 +1,6 @@
 """Alert engine — after-hours and room-on-2h rules."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from .models import Alert
@@ -9,6 +9,8 @@ _local_tz = ZoneInfo("Asia/Dhaka")
 
 _active_alerts: list[Alert] = []
 _alert_counter: int = 0
+
+_ALERT_MAX_AGE = timedelta(hours=1)
 
 
 def _now_local() -> datetime:
@@ -21,9 +23,20 @@ def _make_alert_id() -> str:
     return f"alert-{_alert_counter}-{int(_now_local().timestamp())}"
 
 
+def _prune_expired() -> None:
+    """Remove alerts older than _ALERT_MAX_AGE from the active list."""
+    cutoff = _now_local() - _ALERT_MAX_AGE
+    _active_alerts[:] = [
+        a for a in _active_alerts
+        if datetime.fromisoformat(a.created_at) > cutoff
+    ]
+
+
 def check_alerts(devices: list[dict]) -> list[Alert]:
     """Evaluate alert conditions and return newly created alerts."""
     from . import store
+
+    _prune_expired()
 
     new_alerts: list[Alert] = []
     now = _now_local()
@@ -58,7 +71,6 @@ def check_alerts(devices: list[dict]) -> list[Alert]:
                 if not _is_duplicate(alert):
                     new_alerts.append(alert)
 
-    from datetime import timedelta
     for room_key in store.ROOMS:
         room_devices = [d for d in devices if d["room"] == room_key]
         all_on = all(d["status"] == "on" for d in room_devices) and len(room_devices) > 0
