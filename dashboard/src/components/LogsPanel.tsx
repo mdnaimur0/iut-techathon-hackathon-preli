@@ -28,7 +28,7 @@ export function LogsPanel({ logs, onClose, inline }: Props) {
     <div
       className={
         inline
-          ? ""
+          ? "card-surface relative flex flex-col rounded-[1.625rem]"
           : "overflow-hidden rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border"
       }
     >
@@ -97,7 +97,7 @@ export function LogsPanel({ logs, onClose, inline }: Props) {
         {/* Table */}
         <div
           className={`relative overflow-y-auto overflow-x-hidden ${
-            inline ? "max-h-[28rem] p-4 md:p-5" : "max-h-[60vh] p-3"
+            inline ? "max-h-112 p-4 md:p-5" : "max-h-[60vh] p-3"
           }`}
           style={{ scrollbarGutter: "stable" }}
         >
@@ -167,7 +167,9 @@ export function LogsPanel({ logs, onClose, inline }: Props) {
                           </span>
                         </div>
                       </td>
-                      <td className={`${inline ? "py-3" : "py-2"} pr-3 text-text-tertiary`}>
+                      <td
+                        className={`${inline ? "py-3" : "py-2"} pr-3 text-text-tertiary`}
+                      >
                         {formatRoom(log.room)}
                       </td>
                       <td className={`${inline ? "py-3" : "py-2"} pr-3`}>
@@ -201,7 +203,9 @@ export function LogsPanel({ logs, onClose, inline }: Props) {
                           </span>
                         </div>
                       </td>
-                      <td className={`${inline ? "py-3" : "py-2"} text-text-tertiary`}>
+                      <td
+                        className={`${inline ? "py-3" : "py-2"} text-text-tertiary`}
+                      >
                         {formatTime(log.timestamp)}
                       </td>
                     </tr>

@@ -364,18 +364,23 @@ function App() {
         </div>
       </nav>
 
-      {alertsOpen && createPortal(
-        <>
-          <div
-            className="fixed inset-0 z-60 bg-void/40 backdrop-blur-sm"
-            onClick={() => setAlertsOpen(false)}
-          />
-          <div className="fixed top-20 inset-x-0 z-70 mx-auto w-[calc(100%-2rem)] max-w-md">
-            <AlertsPanel alerts={alerts} onClose={() => setAlertsOpen(false)} onClearAll={clearAlerts} />
-          </div>
-        </>,
-        document.body
-      )}
+      {alertsOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-60 bg-void/40 backdrop-blur-sm"
+              onClick={() => setAlertsOpen(false)}
+            />
+            <div className="fixed top-20 inset-x-0 z-70 mx-auto w-[calc(100%-2rem)] max-w-md">
+              <AlertsPanel
+                alerts={alerts}
+                onClose={() => setAlertsOpen(false)}
+                onClearAll={clearAlerts}
+              />
+            </div>
+          </>,
+          document.body,
+        )}
 
       {/* Mobile menu overlay */}
       <div
@@ -459,7 +464,10 @@ function App() {
         </div>
 
         {/* SECTION 4: Change Logs */}
-        <div ref={section4Ref} className="reveal">
+        <div
+          ref={section4Ref}
+          className="reveal h-full rounded-4xl bg-glass-bg p-1.5 ring-1 ring-glass-border"
+        >
           <LogsPanel logs={logs} inline />
         </div>
       </main>
