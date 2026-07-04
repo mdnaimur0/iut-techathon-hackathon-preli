@@ -5,12 +5,6 @@ interface Props {
   usage: Usage;
 }
 
-const ROOM_COLORS: Record<string, { var: string }> = {
-  drawing: { var: "--color-accent-emerald" },
-  work1: { var: "--color-accent-purple" },
-  work2: { var: "--color-accent-amber" },
-};
-
 export function PowerMeter({ usage }: Props) {
   const maxWatts = 495;
   const pct = Math.min((usage.total_watts_now / maxWatts) * 100, 100);
@@ -74,7 +68,7 @@ export function PowerMeter({ usage }: Props) {
               r={radius}
               fill="none"
               stroke="var(--color-glass-border)"
-              strokeWidth="8"
+              strokeWidth="10"
               strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * 0.25}
@@ -86,7 +80,7 @@ export function PowerMeter({ usage }: Props) {
               r={radius}
               fill="none"
               stroke="url(#gaugeGradient)"
-              strokeWidth="8"
+              strokeWidth="10"
               strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
@@ -98,7 +92,7 @@ export function PowerMeter({ usage }: Props) {
               }}
             />
           </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center top-1/2 -translate-y-1/3">
             <span
               className="animate-count-pulse text-4xl font-bold tabular-nums text-text-primary"
               key={usage.total_watts_now}
@@ -126,10 +120,9 @@ export function PowerMeter({ usage }: Props) {
             <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
               Today
             </p>
-            <p className="mt-1 text-lg font-bold tabular-nums text-text-primary">
+            <p className="mt-1 text-lg font-bold tabular-nums text-text-primary flex flex-wrap items-center gap-0.5">
               {usage.today_kwh}
-              <span className="text-xs font-medium text-text-tertiary">
-                {" "}
+              <span className="text-xs font-medium text-text-tertiary ml-0.5">
                 kWh
               </span>
             </p>
@@ -165,7 +158,6 @@ export function PowerMeter({ usage }: Props) {
             const watts = usage.per_room_watts[key] ?? 0;
             const roomMax = 165;
             const roomPct = Math.min((watts / roomMax) * 100, 100);
-            const colors = ROOM_COLORS[key] ?? ROOM_COLORS.drawing;
             return (
               <div key={key}>
                 <div className="mb-1.5 flex items-center justify-between">
@@ -176,13 +168,13 @@ export function PowerMeter({ usage }: Props) {
                     {watts}W
                   </span>
                 </div>
-                <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-glass-bg)">
+                <div className="relative h-2 w-full overflow-hidden rounded-full bg-glass-bg)">
                   <div
                     className="absolute inset-y-0 left-0 rounded-full"
                     style={{
                       width: `${roomPct}%`,
                       transition: "width 0.8s cubic-bezier(0.32, 0.72, 0, 1)",
-                      backgroundColor: `var(${colors.var})`,
+                      background: "linear-gradient(to right, #10b981, #34d399, #6ee7b7)",
                     }}
                   />
                 </div>

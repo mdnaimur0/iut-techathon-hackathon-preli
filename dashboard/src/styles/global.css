@@ -145,8 +145,8 @@
   --fp-door-swing: grey;
 }
 
-[data-theme="light"] {
-  --color-void: #f6f4f0;
+[data-theme="light"] {  
+  --color-void: #ffffff;
   --color-obsidian: #fdfcfa;
   --color-onyx: #ffffff;
   --color-carbon: #f0eee9;
