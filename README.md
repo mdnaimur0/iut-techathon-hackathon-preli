@@ -250,7 +250,7 @@ MIT
 
 ## Hackathon
 
-This project was originally developed for the Hackathon Segment Final Round of **Techathon Nationals & Rover Summit** - a national event organized by IUT Robotics Society. We are proud to have been **shortlisted as finalists - Top 26 teams among 270+ teams**.
+This project was originally developed for the Hackathon Preliminary Round of **Techathon Nationals & Rover Summit** - a national event organized by IUT Robotics Society. We are proud to have been **shortlisted as finalists - Top 26 teams among 270+ teams**.
 
 ### Team Members
 
