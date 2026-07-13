@@ -4,7 +4,7 @@
 
 A real-time office energy monitoring system with a live web dashboard and Discord bot. Monitor all 15 electrical devices (fans and lights) across 3 office rooms through both a web interface and Discord commands.
 
-## Quick Testing (for Judges)
+## Quick Testing
 
 | What                           | Link                                                                                                                                |
 | :----------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
@@ -241,3 +241,14 @@ Power consumption: Fan ON = 60W, Light ON = 15W. Max office capacity = 495W.
 ## License
 
 MIT
+
+---
+
+## Hackathon
+
+This project was originally developed for the Hackathon Segment Final Round of **Techathon Nationals & Rover Summit** — a national event organized by IUT Robotics Society. We are proud to have been **shortlisted as finalists - Top 26 teams among 270+ teams**.
+
+### Team Members
+
+- [mdnaimur0](https://github.com/mdnaimur0)
+- [moraladnan](https://github.com/moraladnan)

@@ -1,5 +1,5 @@
 [project]
-name = "techathon-hackathon-preli"
+name = "office-energy-monitor"
 version = "0.1.0"
 description = "Office energy monitoring system with live web dashboard and Discord bot"
 readme = "README.md"
