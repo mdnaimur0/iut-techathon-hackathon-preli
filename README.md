@@ -45,6 +45,10 @@ Devices → FastAPI (simulator + store + API + WS + bot) → Dashboard + Discord
 
 ![Demo Control](docs/screenshots/demo-control.png)
 
+### Discord Bot
+
+![Discord Bot](docs/screenshots/dc-bot.png)
+
 ### Wokwi Circuit
 
 ![Wokwi Circuit](docs/screenshots/wokwi-circuit.png)
@@ -117,8 +121,8 @@ Demo scenarios can force specific states for live presentations: `all-on`, `ener
 ### 1. Clone and install dependencies
 
 ```bash
-git clone https://github.com/mdnaimur0/iut-techathon-hackathon-preli.git
-cd iut-techathon-hackathon-preli
+git clone https://github.com/mdnaimur0/office-energy-monitor.git
+cd office-energy-monitor
 
 # Python dependencies
 uv sync
@@ -174,7 +178,7 @@ Open http://localhost:8000 — dashboard + API + WebSocket + Discord bot, all in
 ## Project Structure
 
 ```
-iut-techathon-hackathon-preli/
+office-energy-monitor/
 ├── pyproject.toml           # uv-managed dependencies
 ├── uv.lock                  # lockfile
 ├── .python-version          # Python 3.12
@@ -246,7 +250,7 @@ MIT
 
 ## Hackathon
 
-This project was originally developed for the Hackathon Segment Final Round of **Techathon Nationals & Rover Summit** — a national event organized by IUT Robotics Society. We are proud to have been **shortlisted as finalists - Top 26 teams among 270+ teams**.
+This project was originally developed for the Hackathon Segment Final Round of **Techathon Nationals & Rover Summit** - a national event organized by IUT Robotics Society. We are proud to have been **shortlisted as finalists - Top 26 teams among 270+ teams**.
 
 ### Team Members
 
